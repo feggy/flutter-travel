@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1048455822207",
+    "project_id": "tour-and-travel-49a70",
+    "storage_bucket": "tour-and-travel-49a70.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1048455822207:android:e591b038273cc5e72f784a",
+        "android_client_info": {
+          "package_name": "com.pegee.travel_wisata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1048455822207-dt18dfhm0055eqh5oc9t4o76i7dmo0pc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCo_5mrBEI_HxIvRBNLKFkL2CHy7pQvg48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1048455822207-dt18dfhm0055eqh5oc9t4o76i7dmo0pc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
