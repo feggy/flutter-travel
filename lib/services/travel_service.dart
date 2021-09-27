@@ -46,4 +46,24 @@ class TravelService {
       rethrow;
     }
   }
+
+  Future<TravelModel> getListTravelById({
+    required String id,
+  }) async {
+    try {
+      log('ASD $id');
+      QuerySnapshot result = await _ref.where('id', isEqualTo: id).get();
+
+      var data = result.docs
+          .map((e) => TravelModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      log('TRAVEL $data[0]');
+
+      return data[0];
+    } catch (e) {
+      log('error! $e');
+      rethrow;
+    }
+  }
 }

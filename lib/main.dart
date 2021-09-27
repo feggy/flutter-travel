@@ -8,6 +8,7 @@ import 'package:travel_wisata/cubit/page_cubit.dart';
 import 'package:travel_wisata/cubit/pemandu_cubit.dart';
 import 'package:travel_wisata/cubit/register_cubit.dart';
 import 'package:travel_wisata/cubit/supir_cubit.dart';
+import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/cubit/travel_cubit.dart';
 import 'package:travel_wisata/cubit/wisata_cubit.dart';
 import 'package:travel_wisata/ui/pages/admin_page.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => SupirCubit()),
         BlocProvider(create: (context) => WisataCubit()),
         BlocProvider(create: (context) => TravelCubit()),
+        BlocProvider(create: (context) => TransactionCubit()),
       ],
       child: MaterialApp(
         routes: {

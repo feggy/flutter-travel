@@ -1,4 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:travel_wisata/models/transaction_model.dart';
+import 'package:travel_wisata/models/travel_model.dart';
+import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
@@ -9,12 +15,52 @@ class KonfirmasiPesananPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+
+    var transaction = arguments['transaction'] as TransactionModel?;
+    var dataTravel = arguments['dataTravel'] as TravelModel?;
+    var dataWisata = arguments['dataWisata'] as WisataModel?;
+
+    var listTraveler = transaction!.listTraveler;
+    var tglBerangkat = transaction.tanggalBerangkat;
+
+    log('transaction $transaction\ndata travel $dataTravel\ndata wisata $dataWisata');
+
+    var title = '';
+    var price = '';
+    var desc = '';
+
+    if (dataWisata != null) {
+      title = dataWisata.nama;
+      price = dataWisata.biaya;
+      desc = dataWisata.deskripsiHari;
+    } else {
+      title = dataTravel!.nama;
+      price = dataTravel.biaya;
+      desc = dataTravel.kelas;
+    }
+
+    int number = int.parse(price);
+    var priceRp = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    ).format(number);
+
+    int total = int.parse(price) * listTraveler.length;
+    var totalRp = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    ).format(total);
+
     Widget headerBox() {
       return HeaderPesananCover(
-          title: 'Wisata Bukit Tinggi',
-          price: 'Rp2.000.000',
-          desc: '3 Hari 2 Malam',
-          date: '18 September 2021');
+        title: title,
+        price: priceRp,
+        desc: desc,
+        date: tglBerangkat,
+      );
     }
 
     Widget buttonLanjut() {
@@ -26,9 +72,11 @@ class KonfirmasiPesananPage extends StatelessWidget {
             bottom: 30,
           ),
           child: CustomButton(
-              title: 'PEMBAYARAN',
+              title: 'KONFIRMASI',
               onPressed: () {
-                Navigator.pushNamed(context, '/pembayaran');
+                Navigator.pushNamed(context, '/pembayaran', arguments: {
+                  'transaction': transaction,
+                });
               }),
         ),
       );
@@ -56,7 +104,7 @@ class KonfirmasiPesananPage extends StatelessWidget {
             ),
           ),
           Text(
-            '10 Traveler x Rp2.000.000',
+            '${listTraveler.length} x Traveler x $priceRp',
             style: blackTextStyle.copyWith(
               fontSize: 14,
               fontWeight: medium,
@@ -73,7 +121,7 @@ class KonfirmasiPesananPage extends StatelessWidget {
             ),
           ),
           Text(
-            'Rp20.000.000',
+            totalRp,
             style: primaryTextStyle.copyWith(
               fontSize: 16,
               fontWeight: bold,

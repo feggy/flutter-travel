@@ -1,9 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
@@ -33,7 +34,19 @@ class FormPendaftaranPage extends StatefulWidget {
 }
 
 class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
+  var email = '';
+  getPref() async {
+    final pref = await SharedPreferences.getInstance();
+    email = pref.getString('email') ?? '';
+  }
+
   List<Traveler> listTraveler = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getPref();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +55,6 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
         onTap: () {
           Navigator.pushNamed(context, '/data_traveler').then((value) {
             Traveler data = value as Traveler;
-            log(data.toString());
             setState(() {
               listTraveler.add(data);
             });
@@ -130,7 +142,6 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                         ),
                       ).then((value) {
                         var result = value as Traveler;
-                        log(result.toString());
                         var index = listTraveler.indexOf(e);
                         setState(() {
                           listTraveler.removeAt(index);
@@ -167,8 +178,31 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                       backgroundColor: redColor,
                     ),
                   );
+                } else {
+                  var idInvoice = 'invoice-${Random().nextInt(9999999)}';
+                  var idTravel = '';
+                  if (widget.dataTravel != null) {
+                    idTravel = widget.dataTravel!.id;
+                  } else {
+                    idTravel = widget.dataWisata!.id;
+                  }
+
+                  var transaction = TransactionModel(
+                      idInvoice: idInvoice,
+                      idTravel: idTravel,
+                      emailUser: email,
+                      tanggalBerangkat: widget.tglBerangkat,
+                      listTraveler: listTraveler,
+                      imageTransfer: '',
+                      category: widget.category,
+                      status: 0);
+                  Navigator.pushNamed(context, '/konfirmasi_pesanan',
+                      arguments: {
+                        'transaction': transaction,
+                        'dataTravel': widget.dataTravel,
+                        'dataWisata': widget.dataWisata,
+                      });
                 }
-                // Navigator.pushNamed(context, '/konfirmasi_pesanan');
               }),
         ),
       );

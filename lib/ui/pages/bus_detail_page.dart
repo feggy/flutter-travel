@@ -247,7 +247,7 @@ class _BusDetailPageState extends State<BusDetailPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: const Text(
-                            'Gagal memesan!\nPilih tanggal keberangkatn terlebih dahulu'),
+                            'Pilih tanggal keberangkatn terlebih dahulu'),
                         backgroundColor: redColor,
                       ),
                     );

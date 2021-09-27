@@ -1,46 +1,62 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:travel_wisata/models/travel_model.dart';
+import 'package:travel_wisata/models/wisata_model.dart';
+
+/*NOTE 
+* Status 
+* 0 Menunggu persetujuan, 1 disetujui, 2 sedang berlangsung, 3 ditolak
+*/
+
 class TransactionModel extends Equatable {
   final String idInvoice;
   final String idTravel;
-  final String jumlah;
+  final String emailUser;
   final String tanggalBerangkat;
-  final List<Traveler> listTravel;
-  final String imageTransfer;
+  final List<Traveler> listTraveler;
+  String imageTransfer;
   final String category;
+  int status;
 
-  const TransactionModel({
+  TransactionModel({
     required this.idInvoice,
     required this.idTravel,
-    required this.jumlah,
+    required this.emailUser,
     required this.tanggalBerangkat,
-    required this.listTravel,
+    required this.listTraveler,
     required this.imageTransfer,
     required this.category,
+    required this.status,
   });
 
   @override
-  List<Object?> get props => [
-        idInvoice,
-        idTravel,
-        jumlah,
-        tanggalBerangkat,
-        listTravel,
-        imageTransfer,
-        category,
-      ];
+  List<Object> get props {
+    return [
+      idInvoice,
+      idTravel,
+      emailUser,
+      tanggalBerangkat,
+      listTraveler,
+      imageTransfer,
+      category,
+      status,
+    ];
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'idInvoice': idInvoice,
       'idTravel': idTravel,
-      'jumlah': jumlah,
+      'emailUser': emailUser,
       'tanggalBerangkat': tanggalBerangkat,
-      'listTravel': listTravel.map((x) => x.toMap()).toList(),
+      'listTraveler': listTraveler.map((x) => x.toMap()).toList(),
       'imageTransfer': imageTransfer,
       'category': category,
+      'status': status,
     };
   }
 
@@ -48,12 +64,13 @@ class TransactionModel extends Equatable {
     return TransactionModel(
       idInvoice: map['idInvoice'],
       idTravel: map['idTravel'],
-      jumlah: map['jumlah'],
+      emailUser: map['emailUser'],
       tanggalBerangkat: map['tanggalBerangkat'],
-      listTravel: List<Traveler>.from(
-          map['listTravel']?.map((x) => Traveler.fromMap(x))),
+      listTraveler: List<Traveler>.from(
+          map['listTraveler']?.map((x) => Traveler.fromMap(x))),
       imageTransfer: map['imageTransfer'],
       category: map['category'],
+      status: map['status'],
     );
   }
 
@@ -61,6 +78,9 @@ class TransactionModel extends Equatable {
 
   factory TransactionModel.fromJson(String source) =>
       TransactionModel.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
 }
 
 class Traveler {
@@ -98,4 +118,19 @@ class Traveler {
   @override
   String toString() =>
       'Travel(nama: $nama, umur: $umur, jenisKelamin: $jenisKelamin)';
+}
+
+class ResTransaciton {
+  TransactionModel? transaction;
+  TravelModel? travel;
+  WisataModel? wisata;
+  ResTransaciton({
+    this.transaction,
+    this.travel,
+    this.wisata,
+  });
+
+  @override
+  String toString() =>
+      'ResTransaciton(transaction: $transaction, travel: $travel, wisata: $wisata)';
 }

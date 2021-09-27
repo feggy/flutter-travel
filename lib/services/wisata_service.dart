@@ -59,4 +59,19 @@ class WisataService {
       rethrow;
     }
   }
+
+  Future<WisataModel> getListWisataById({required String id}) async {
+    try {
+      QuerySnapshot result =
+          await _wisataReference.where('id', isEqualTo: id).get();
+
+      List<WisataModel> data = result.docs
+          .map((e) => WisataModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+
+      return data[0];
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

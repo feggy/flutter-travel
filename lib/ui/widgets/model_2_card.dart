@@ -84,11 +84,11 @@ class Model2Card extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: blackTextStyle.copyWith(
                     fontSize: 14,
-                    fontWeight: medium,
+                    fontWeight: semiBold,
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 7,
                 ),
                 Text(
                   newSubtitle,
@@ -99,7 +99,7 @@ class Model2Card extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 1,
                 ),
                 Text(
                   deskripsi,

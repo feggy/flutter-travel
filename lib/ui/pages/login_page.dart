@@ -57,16 +57,17 @@ class LoginPage extends StatelessWidget {
       );
     }
 
-    setRole(String role) async {
+    setPref(String role, String email) async {
       final pref = await SharedPreferences.getInstance();
       pref.setString('role', role);
+      pref.setString('email', email);
     }
 
     Widget buttonLogin() {
       return BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            setRole(state.user.role);
+            setPref(state.user.role, state.user.email);
             if (state.user.role == 'USER') {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/main', (route) => false);
