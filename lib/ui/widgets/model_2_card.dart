@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,19 +13,44 @@ enum Category {
 class Model2Card extends StatelessWidget {
   final String nama;
   final String harga;
-  final String deskripsi;
+  String deskripsi;
   final String imageUrl;
+  int? status;
 
-  const Model2Card({
+  Model2Card({
     Key? key,
     required this.nama,
     required this.harga,
     required this.deskripsi,
     required this.imageUrl,
+    this.status,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var statusColor = greyColor;
+    var bold = false;
+
+    if (status != null) {
+      bold = true;
+      if (status == 0) {
+        statusColor = primaryColor;
+        deskripsi = 'Menuggu persetujuan';
+      } else if (status == 1) {
+        statusColor = greenColor;
+        deskripsi = 'Disetujui';
+      } else if (status == 2) {
+        statusColor = yellowColor;
+        deskripsi = 'Sedang berlangsung';
+      } else if (status == 3) {
+        statusColor = redColor;
+        deskripsi = 'Ditolak';
+      } else if (status == 4) {
+        statusColor = greenColor;
+        deskripsi = 'Selesai';
+      }
+    }
+
     bool isNumeric(String s) {
       return double.tryParse(s) != null;
     }
@@ -106,7 +133,8 @@ class Model2Card extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: greyTextStyle.copyWith(
                     fontSize: 12,
-                    fontWeight: regular,
+                    fontWeight: bold ? semiBold : regular,
+                    color: statusColor,
                   ),
                 )
               ],

@@ -48,3 +48,23 @@ class TransactionFailedAdd extends TransactionState {
   @override
   List<Object> get props => [response];
 }
+
+class TransactionLoadingGet extends TransactionState {}
+
+class TransactionSuccessGet extends TransactionState {
+  final ResTransaciton res;
+
+  const TransactionSuccessGet(this.res);
+
+  @override
+  List<Object> get props => [res];
+}
+
+class TransactionFailedGet extends TransactionState {
+  final String error;
+
+  const TransactionFailedGet(this.error);
+
+  @override
+  List<Object> get props => [error];
+}

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/services/transaction_service.dart';
 
@@ -32,6 +33,7 @@ class TransactionCubit extends Cubit<TransactionState> {
 
   void getListTransaction({required String email}) async {
     try {
+      emit(TransactionInitial());
       emit(TransactionLoading());
 
       await TransactionService().getListTransaction(email: email).then((value) {
@@ -48,6 +50,44 @@ class TransactionCubit extends Cubit<TransactionState> {
     } catch (e) {
       log(e.toString());
       emit(TransactionFailed(e.toString()));
+    }
+  }
+
+  void updateStatus({required String idInvoice, required int status}) async {
+    try {
+      emit(TransactionLoading());
+
+      await TransactionService()
+          .updateStatus(idInvoice: idInvoice, status: status)
+          .then((value) {
+        log('message $value');
+        emit(TransactionSuccessAdd(value));
+      }).catchError((onError) {
+        log('message $onError');
+        emit(TransactionFailedAdd(onError));
+      });
+    } catch (e) {
+      log(e.toString());
+      emit(TransactionFailedAdd(e.toString()));
+    }
+  }
+
+  void getTransaction({required String idInvoice}) async {
+    try {
+      emit(TransactionLoadingGet());
+
+      await TransactionService()
+          .getTransaction(idInvoice: idInvoice)
+          .then((value) {
+        log('message $value');
+        emit(TransactionSuccessGet(value));
+      }).catchError((onError) {
+        log('message $onError');
+        emit(TransactionFailedGet(onError));
+      });
+    } catch (e) {
+      log(e.toString());
+      emit(TransactionFailedGet(e.toString()));
     }
   }
 }

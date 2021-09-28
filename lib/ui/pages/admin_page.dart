@@ -42,7 +42,9 @@ class AdminPage extends StatelessWidget {
           ),
           SingleTextCard(
             text: 'Daftar Transaksi',
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, '/transaksi_admin');
+            },
           ),
         ],
       );
@@ -65,21 +67,23 @@ class AdminPage extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Beranda Admin',
-                      style: blackTextStyle.copyWith(
-                        fontSize: 24,
-                        fontWeight: semiBold,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Beranda Admin',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 24,
+                          fontWeight: semiBold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 70,
-                    ),
-                    listCard(),
-                  ],
+                      const SizedBox(
+                        height: 70,
+                      ),
+                      listCard(),
+                    ],
+                  ),
                 ),
               ),
               BlocConsumer<AuthCubit, AuthState>(

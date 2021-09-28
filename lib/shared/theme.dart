@@ -13,6 +13,7 @@ Color grey2Color = const Color(0xffF4F4F4);
 Color grey3Color = const Color(0xffE5E5E5);
 Color whiteColor = const Color(0xffFFFFFF);
 Color greenColor = const Color(0xff4DD673);
+Color yellowColor = const Color(0xffD6B84D);
 Color redColor = const Color(0xffD64D4D);
 Color transparentColor = Colors.transparent;
 

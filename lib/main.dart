@@ -16,7 +16,9 @@ import 'package:travel_wisata/ui/pages/bus_admin_page.dart';
 import 'package:travel_wisata/ui/pages/bus_page.dart';
 import 'package:travel_wisata/ui/pages/daftar_pemandu_page.dart';
 import 'package:travel_wisata/ui/pages/daftar_supir_page.dart';
+import 'package:travel_wisata/ui/pages/daftar_transaksi_admin_page.dart';
 import 'package:travel_wisata/ui/pages/data_traveler_page.dart';
+import 'package:travel_wisata/ui/pages/detail_transaction_admin_page.dart';
 import 'package:travel_wisata/ui/pages/konfirmasi_pesanan_page.dart';
 import 'package:travel_wisata/ui/pages/login_page.dart';
 import 'package:travel_wisata/ui/pages/main_page.dart';
@@ -73,6 +75,9 @@ class MyApp extends StatelessWidget {
           '/tambah_agenda': (context) => const TambahAgendaPage(),
           '/bus_admin': (context) => const BusAdminPage(),
           '/tambah_bus': (context) => const TambahBusPage(),
+          '/transaksi_admin': (context) => const TransactionAdminPage(),
+          '/detail_transaksi_admin': (context) =>
+              const DetailTransactionAdminPage(),
         },
       ),
     );

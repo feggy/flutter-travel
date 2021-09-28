@@ -35,9 +35,13 @@ class FormPendaftaranPage extends StatefulWidget {
 
 class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
   var email = '';
+  var phone = '';
+  var name = '';
   getPref() async {
     final pref = await SharedPreferences.getInstance();
     email = pref.getString('email') ?? '';
+    phone = pref.getString('phone') ?? '';
+    name = pref.getString('name') ?? '';
   }
 
   List<Traveler> listTraveler = [];
@@ -188,14 +192,18 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                   }
 
                   var transaction = TransactionModel(
-                      idInvoice: idInvoice,
-                      idTravel: idTravel,
-                      emailUser: email,
-                      tanggalBerangkat: widget.tglBerangkat,
-                      listTraveler: listTraveler,
-                      imageTransfer: '',
-                      category: widget.category,
-                      status: 0);
+                    idInvoice: idInvoice,
+                    idTravel: idTravel,
+                    emailUser: email,
+                    tanggalBerangkat: widget.tglBerangkat,
+                    listTraveler: listTraveler,
+                    imageTransfer: '',
+                    category: widget.category,
+                    status: 0,
+                    phoneUser: phone,
+                    namaUser: name,
+                    timeCreated: DateTime.now().toString(),
+                  );
                   Navigator.pushNamed(context, '/konfirmasi_pesanan',
                       arguments: {
                         'transaction': transaction,

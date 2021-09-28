@@ -26,6 +26,7 @@ class _PembayaranPageState extends State<PembayaranPage> {
   String? imagePath;
   String imageUrl = '';
   var bytes;
+  bool btnDisable = true;
 
   @override
   void initState() {
@@ -55,11 +56,12 @@ class _PembayaranPageState extends State<PembayaranPage> {
     }
 
     void pickImageFromGallery() async {
-      final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
-        uploadImage(File(pickedImage!.path));
-        bytes = File(pickedImage.path).readAsBytesSync();
+      await _picker.pickImage(source: ImageSource.gallery).then((value) {
+        setState(() {
+          uploadImage(File(value!.path));
+          bytes = File(value.path).readAsBytesSync();
+          btnDisable = false;
+        });
       });
     }
 
@@ -146,20 +148,23 @@ class _PembayaranPageState extends State<PembayaranPage> {
 
           return CustomButton(
               title: 'SELESAI',
-              onPressed: () {
-                if (imageUrl.isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        const Text('Upload bukti transfer terlebih dahulu'),
-                    backgroundColor: redColor,
-                  ));
-                } else {
-                  transaction.imageTransfer = imageUrl;
-                  context
-                      .read<TransactionCubit>()
-                      .addTransaction(data: transaction);
-                }
-              });
+              color: btnDisable ? grey3Color : primaryColor,
+              onPressed: btnDisable
+                  ? () {}
+                  : () {
+                      if (imageUrl.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: const Text(
+                              'Upload bukti transfer terlebih dahulu'),
+                          backgroundColor: redColor,
+                        ));
+                      } else {
+                        transaction.imageTransfer = imageUrl;
+                        context
+                            .read<TransactionCubit>()
+                            .addTransaction(data: transaction);
+                      }
+                    });
         },
       );
     }

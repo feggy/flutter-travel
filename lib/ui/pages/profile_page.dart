@@ -19,6 +19,20 @@ class ProfilePage extends StatelessWidget {
       pref.clear();
     }
 
+    Widget ubahProfile() {
+      return TextButton(
+        child: Text(
+          'Ubah Profile',
+          style: greyTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: regular,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+        onPressed: () {},
+      );
+    }
+
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthFailed) {
@@ -54,17 +68,7 @@ class ProfilePage extends StatelessWidget {
                           fontWeight: semiBold,
                         ),
                       ),
-                      TextButton(
-                        child: Text(
-                          'Ubah Profile',
-                          style: greyTextStyle.copyWith(
-                            fontSize: 12,
-                            fontWeight: regular,
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        onPressed: () {},
-                      ),
+                      // ubahProfile(),
                       const SizedBox(
                         height: 40,
                       ),

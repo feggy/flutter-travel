@@ -12,8 +12,9 @@ import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
-import 'package:travel_wisata/ui/widgets/jumlah_kursi_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'isi_data_wisata_page.dart';
 
 class WisataDetailPage extends StatefulWidget {
   final WisataModel data;
@@ -252,20 +253,33 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
         ),
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                JumlahKursiItem(),
-                tanggalBerangkat(),
-              ],
-            ),
+            tanggalBerangkat(),
             const SizedBox(
               height: 25,
             ),
             CustomButton(
                 title: 'PESAN SEKARANG',
                 onPressed: () {
-                  Navigator.pushNamed(context, '/pendaftaran_wisata');
+                  if (tglBerangkat == "Pilih tanggal") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text(
+                            'Pilih tanggal keberangkatn terlebih dahulu'),
+                        backgroundColor: redColor,
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FormPendaftaranPage(
+                          category: 'WISATA',
+                          tglBerangkat: tglBerangkat,
+                          dataWisata: widget.data,
+                        ),
+                      ),
+                    );
+                  }
                 }),
           ],
         ),

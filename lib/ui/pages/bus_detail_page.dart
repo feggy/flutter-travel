@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_wisata/models/role_enum.dart';
+import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/isi_data_wisata_page.dart';
@@ -11,12 +12,14 @@ import 'package:travel_wisata/ui/widgets/custom_button.dart';
 
 class BusDetailPage extends StatefulWidget {
   final TravelModel data;
+  final ResTransaciton? res;
   final ROLE role;
 
   const BusDetailPage({
     Key? key,
     required this.data,
     required this.role,
+    this.res,
   }) : super(key: key);
 
   @override
@@ -227,46 +230,50 @@ class _BusDetailPageState extends State<BusDetailPage> {
     }
 
     Widget footerUser() {
-      return Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          bottom: 30,
-          left: 20,
-          right: 20,
-        ),
-        child: Column(
-          children: [
-            tanggalBerangkat(),
-            const SizedBox(
-              height: 25,
-            ),
-            CustomButton(
-                title: 'PESAN SEKARANG',
-                onPressed: () {
-                  if (tglBerangkat == "Pilih tanggal") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text(
-                            'Pilih tanggal keberangkatn terlebih dahulu'),
-                        backgroundColor: redColor,
-                      ),
-                    );
-                  } else {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FormPendaftaranPage(
-                          category: 'TRAVEL',
-                          tglBerangkat: tglBerangkat,
-                          dataTravel: widget.data,
+      if (widget.res != null) {
+        return const SizedBox();
+      } else {
+        return Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 30,
+            left: 20,
+            right: 20,
+          ),
+          child: Column(
+            children: [
+              tanggalBerangkat(),
+              const SizedBox(
+                height: 25,
+              ),
+              CustomButton(
+                  title: 'PESAN SEKARANG',
+                  onPressed: () {
+                    if (tglBerangkat == "Pilih tanggal") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text(
+                              'Pilih tanggal keberangkatn terlebih dahulu'),
+                          backgroundColor: redColor,
                         ),
-                      ),
-                    );
-                  }
-                }),
-          ],
-        ),
-      );
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FormPendaftaranPage(
+                            category: 'TRAVEL',
+                            tglBerangkat: tglBerangkat,
+                            dataTravel: widget.data,
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+            ],
+          ),
+        );
+      }
     }
 
     Widget footerAdmin() {

@@ -32,6 +32,9 @@ class TransactionService {
         'imageTransfer': data.imageTransfer,
         'category': data.category,
         'status': data.status,
+        'namaUser': data.namaUser,
+        'phoneUser': data.phoneUser,
+        'timeCreated': data.timeCreated,
       }).then((value) {
         response = 'Berhasil melakukan pembayaran';
         log(response);
@@ -52,22 +55,21 @@ class TransactionService {
       QuerySnapshot result =
           await _ref.where('emailUser', isEqualTo: email).get();
 
+      if (email == 'admin') {
+        result = await _ref.get();
+      }
+
       List<TransactionModel> listTransaction = result.docs
           .map(
               (e) => TransactionModel.fromMap(e.data() as Map<String, dynamic>))
           .toList();
 
-      log('LIST TRANSACTION $listTransaction');
-
       List<ResTransaciton> listRes = [];
 
       for (var element in listTransaction) {
         if (element.category == 'TRAVEL') {
-          log('ID ${element.idTravel}');
-
           TravelModel travel =
               await TravelService().getListTravelById(id: element.idTravel);
-          log('TRAVEL22 $travel');
           listRes.add(ResTransaciton(transaction: element, travel: travel));
         } else {
           WisataModel wisata =
@@ -79,6 +81,52 @@ class TransactionService {
       return listRes;
     } catch (e) {
       log('error $e');
+      rethrow;
+    }
+  }
+
+  Future<ResTransaciton> getTransaction({required String idInvoice}) async {
+    try {
+      var result = await _ref.where('idInvoice', isEqualTo: idInvoice).get();
+
+      var dataTransaction = result.docs
+          .map(
+              (e) => TransactionModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList()[0];
+
+      if (dataTransaction.category == 'TRAVEL') {
+        TravelModel travel = await TravelService()
+            .getListTravelById(id: dataTransaction.idTravel);
+        return ResTransaciton(transaction: dataTransaction, travel: travel);
+      } else {
+        WisataModel wisata = await WisataService()
+            .getListWisataById(id: dataTransaction.idTravel);
+        return ResTransaciton(transaction: dataTransaction, wisata: wisata);
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> updateStatus(
+      {required String idInvoice, required int status}) async {
+    try {
+      var result = await _ref.where('idInvoice', isEqualTo: idInvoice).get();
+      String response = '';
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _ref.doc(id).update({'status': status}).then((value) {
+            response = 'Status pembayaran berhasil disetujui';
+          }).catchError((onError) {
+            response = 'ERROR $onError';
+          });
+        }
+      }
+
+      return response;
+    } catch (e) {
       rethrow;
     }
   }

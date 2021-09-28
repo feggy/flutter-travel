@@ -9,7 +9,7 @@ import 'package:travel_wisata/models/wisata_model.dart';
 
 /*NOTE 
 * Status 
-* 0 Menunggu persetujuan, 1 disetujui, 2 sedang berlangsung, 3 ditolak
+* 0 Menunggu persetujuan, 1 disetujui, 2 sedang berlangsung, 3 ditolak, 4 selesai
 */
 
 class TransactionModel extends Equatable {
@@ -21,6 +21,9 @@ class TransactionModel extends Equatable {
   String imageTransfer;
   final String category;
   int status;
+  String namaUser;
+  String phoneUser;
+  String timeCreated;
 
   TransactionModel({
     required this.idInvoice,
@@ -31,6 +34,9 @@ class TransactionModel extends Equatable {
     required this.imageTransfer,
     required this.category,
     required this.status,
+    required this.namaUser,
+    required this.phoneUser,
+    required this.timeCreated,
   });
 
   @override
@@ -44,6 +50,9 @@ class TransactionModel extends Equatable {
       imageTransfer,
       category,
       status,
+      namaUser,
+      phoneUser,
+      timeCreated,
     ];
   }
 
@@ -57,6 +66,9 @@ class TransactionModel extends Equatable {
       'imageTransfer': imageTransfer,
       'category': category,
       'status': status,
+      'namaUser': namaUser,
+      'phoneUser': phoneUser,
+      'timeCreated': timeCreated,
     };
   }
 
@@ -71,6 +83,9 @@ class TransactionModel extends Equatable {
       imageTransfer: map['imageTransfer'],
       category: map['category'],
       status: map['status'],
+      namaUser: map['namaUser'],
+      phoneUser: map['phoneUser'],
+      timeCreated: map['timeCreated'],
     );
   }
 
