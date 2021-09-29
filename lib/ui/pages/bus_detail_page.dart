@@ -7,6 +7,7 @@ import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/isi_data_wisata_page.dart';
+import 'package:travel_wisata/ui/pages/search_address_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 
@@ -288,6 +289,27 @@ class _BusDetailPageState extends State<BusDetailPage> {
           onPressed: () {});
     }
 
+    Widget buttonJemput() {
+      return Padding(
+        padding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 30,
+          top: 10,
+        ),
+        child: CustomButton(
+            title: 'JEMPUT SAYA',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchAddressPage(),
+                ),
+              );
+            }),
+      );
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       appBar: AppBarItem(title: 'Rincian'),
@@ -319,6 +341,7 @@ class _BusDetailPageState extends State<BusDetailPage> {
               ),
             ),
           ),
+          widget.res != null ? buttonJemput() : const SizedBox(),
           widget.role == ROLE.user ? footerUser() : footerAdmin(),
         ],
       ),
