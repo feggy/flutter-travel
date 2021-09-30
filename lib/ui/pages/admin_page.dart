@@ -17,9 +17,9 @@ class AdminPage extends StatelessWidget {
       return Column(
         children: [
           SingleTextCard(
-            text: 'Kelola Pemandu Wisata',
+            text: 'Daftar Transaksi',
             onPressed: () {
-              Navigator.pushNamed(context, '/pemandu');
+              Navigator.pushNamed(context, '/transaksi_admin');
             },
           ),
           SingleTextCard(
@@ -35,15 +35,15 @@ class AdminPage extends StatelessWidget {
             },
           ),
           SingleTextCard(
-            text: 'Kelola Supir',
+            text: 'Kelola Pemandu Wisata',
             onPressed: () {
-              Navigator.pushNamed(context, '/supir');
+              Navigator.pushNamed(context, '/pemandu');
             },
           ),
           SingleTextCard(
-            text: 'Daftar Transaksi',
+            text: 'Kelola Supir',
             onPressed: () {
-              Navigator.pushNamed(context, '/transaksi_admin');
+              Navigator.pushNamed(context, '/supir');
             },
           ),
         ],

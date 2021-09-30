@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                   return SingleChildScrollView(
                     child: Column(
                         children: state.travel
-                            .map((e) => GestureDetector(
+                            .map((e) => InkWell(
                                   onTap: () {
                                     Navigator.push(
                                       context,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/cubit/gender_cubit.dart';
+import 'package:travel_wisata/cubit/jemput_cubit.dart';
 import 'package:travel_wisata/cubit/jumlah_kursi_cubit.dart';
 import 'package:travel_wisata/cubit/page_cubit.dart';
 import 'package:travel_wisata/cubit/pemandu_cubit.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => WisataCubit()),
         BlocProvider(create: (context) => TravelCubit()),
         BlocProvider(create: (context) => TransactionCubit()),
+        BlocProvider(create: (context) => JemputCubit()),
       ],
       child: MaterialApp(
         routes: {

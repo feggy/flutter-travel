@@ -1,11 +1,16 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:travel_wisata/cubit/jemput_cubit.dart';
 import 'package:travel_wisata/models/alamat_travel_model.dart';
+import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/select_address_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
@@ -13,7 +18,9 @@ import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/custom_input_text.dart';
 
 class SearchAddressPage extends StatefulWidget {
-  const SearchAddressPage({Key? key}) : super(key: key);
+  ResTransaciton res;
+
+  SearchAddressPage({Key? key, required this.res}) : super(key: key);
 
   @override
   State<SearchAddressPage> createState() => _SearchAddressPageState();
@@ -58,9 +65,9 @@ class _SearchAddressPageState extends State<SearchAddressPage>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
-      final status = await Permission.location.status;
-      _getCurrentLocation();
-      if (status.isGranted) {
+      final status = await Permission.location.isGranted;
+      if (status) {
+        _getCurrentLocation();
         setState(() {
           permStatus = true;
         });
@@ -237,31 +244,73 @@ class _SearchAddressPageState extends State<SearchAddressPage>
                     const SizedBox(
                       height: 20,
                     ),
-                    CustomButton(
-                        title: 'SIMPAN',
-                        onPressed: () {
-                          String errorMsg = '';
-                          if (jalan.text.isEmpty) {
-                            errorMsg = 'Kolom jalan tidak boleh kosong';
-                          } else if (kecamatan.text.isEmpty) {
-                            errorMsg = 'Kolom kecamatan tidak boleh kosong';
-                          } else if (kelurahan.text.isEmpty) {
-                            errorMsg = 'Kolom kelurahan tidak boleh kosong';
-                          } else if (kabupaten.text.isEmpty) {
-                            errorMsg = 'Kolom kabupaten tidak boleh kosong';
-                          } else if (provinsi.text.isEmpty) {
-                            errorMsg = 'Kolom provisin tidak boleh kosong';
-                          }
+                    BlocConsumer<JemputCubit, JemputState>(
+                      listener: (context, state) {
+                        if (state is JemputSuccessAdd) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(state.response),
+                            backgroundColor: greenColor,
+                          ));
+                          Navigator.pop(context);
+                        } else if (state is JemputFailedAdd) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(state.error),
+                            backgroundColor: redColor,
+                          ));
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is JemputLoading) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
 
-                          if (errorMsg.isNotEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(errorMsg),
-                                backgroundColor: redColor,
-                              ),
-                            );
-                          } else {}
-                        }),
+                        return CustomButton(
+                            title: 'SIMPAN',
+                            onPressed: () {
+                              String errorMsg = '';
+                              if (jalan.text.isEmpty) {
+                                errorMsg = 'Kolom jalan tidak boleh kosong';
+                              } else if (kecamatan.text.isEmpty) {
+                                errorMsg = 'Kolom kecamatan tidak boleh kosong';
+                              } else if (kelurahan.text.isEmpty) {
+                                errorMsg = 'Kolom kelurahan tidak boleh kosong';
+                              } else if (kabupaten.text.isEmpty) {
+                                errorMsg = 'Kolom kabupaten tidak boleh kosong';
+                              } else if (provinsi.text.isEmpty) {
+                                errorMsg = 'Kolom provisin tidak boleh kosong';
+                              }
+
+                              if (errorMsg.isNotEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(errorMsg),
+                                    backgroundColor: redColor,
+                                  ),
+                                );
+                              } else {
+                                var res = widget.res;
+                                var data = JemputPenumpang(
+                                  idTravel: res.transaction!.idTravel,
+                                  idInvoice: res.transaction!.idInvoice,
+                                  lat: lat,
+                                  lng: lng,
+                                  status: 1,
+                                  alamat:
+                                      '${alamat!.jalan}, ${alamat!.kecamatan}, ${alamat!.kelurahan}, ${alamat!.kabupaten}, ${alamat!.provinsi}, ${alamat!.postalCode}',
+                                  listTraveler: res.transaction!.listTraveler,
+                                  namaUser: res.transaction!.namaUser,
+                                  phoneUser: res.transaction!.phoneUser,
+                                );
+
+                                context
+                                    .read<JemputCubit>()
+                                    .addJemput(data: data);
+                              }
+                            });
+                      },
+                    ),
                     const SizedBox(
                       height: 60,
                     ),
@@ -279,7 +328,7 @@ class _SearchAddressPageState extends State<SearchAddressPage>
   }
 
   void permissionRequest() async {
-    var status = await Permission.accessMediaLocation.status;
+    var status = await Permission.location.status;
     if (status.isGranted) {
       setState(() {
         permStatus = true;
@@ -288,8 +337,8 @@ class _SearchAddressPageState extends State<SearchAddressPage>
   }
 
   void openSettingReq() async {
-    var req = await Permission.accessMediaLocation.request();
-    if (req.isDenied) {
+    var req = await Permission.location.request();
+    if (req.isPermanentlyDenied) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(

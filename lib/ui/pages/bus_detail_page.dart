@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_wisata/cubit/jemput_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
@@ -29,6 +31,20 @@ class BusDetailPage extends StatefulWidget {
 
 class _BusDetailPageState extends State<BusDetailPage> {
   var tglBerangkat = 'Pilih tanggal';
+  var status = 'Belum membuat permintaan';
+  var kodeStatus = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<JemputCubit>().reset();
+    if (widget.res != null) {
+      context.read<JemputCubit>().getJemput(
+            idTravel: widget.res!.transaction!.idTravel,
+            idInvoice: widget.res!.transaction!.idInvoice,
+          );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,23 +306,74 @@ class _BusDetailPageState extends State<BusDetailPage> {
     }
 
     Widget buttonJemput() {
-      return Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-          bottom: 30,
-          top: 10,
-        ),
-        child: CustomButton(
-            title: 'JEMPUT SAYA',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SearchAddressPage(),
+      if (kodeStatus == 0) {
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 30,
+            top: 10,
+          ),
+          child: CustomButton(
+              title: 'JEMPUT SAYA',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchAddressPage(
+                      res: widget.res!,
+                    ),
+                  ),
+                ).then((value) {
+                  context.read<JemputCubit>().getJemput(
+                        idTravel: widget.res!.transaction!.idTravel,
+                        idInvoice: widget.res!.transaction!.idInvoice,
+                      );
+                });
+              }),
+        );
+      } else {
+        return const SizedBox();
+      }
+    }
+
+    Widget jemput() {
+      return BlocBuilder<JemputCubit, JemputState>(
+        builder: (context, state) {
+          if (state is JemputSuccessGet) {
+            switch (state.data.status) {
+              case 1:
+                status = 'Diproses';
+                break;
+              case 2:
+                status = 'Sudah dijemput';
+                break;
+              default:
+                status = 'Belum membuat permintaan';
+            }
+            kodeStatus = state.data.status;
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Status Jemput',
+                style: blackTextStyle.copyWith(
+                  fontWeight: semiBold,
                 ),
-              );
-            }),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                status,
+                style:
+                    blackTextStyle.copyWith(fontSize: 12, fontWeight: regular),
+              ),
+              widget.res != null ? buttonJemput() : const SizedBox(),
+            ],
+          );
+        },
       );
     }
 
@@ -336,12 +403,15 @@ class _BusDetailPageState extends State<BusDetailPage> {
                       height: 20,
                     ),
                     fasilitas(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    widget.res != null ? jemput() : const SizedBox(),
                   ],
                 ),
               ),
             ),
           ),
-          widget.res != null ? buttonJemput() : const SizedBox(),
           widget.role == ROLE.user ? footerUser() : footerAdmin(),
         ],
       ),

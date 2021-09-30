@@ -82,7 +82,7 @@ class _TransactionPageState extends State<TransactionPage> {
                           imageUrl = e.wisata!.imageUrl;
                         }
 
-                        return GestureDetector(
+                        return InkWell(
                           onTap: () {
                             if (e.transaction!.category == 'TRAVEL') {
                               Navigator.push(

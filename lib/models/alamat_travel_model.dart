@@ -4,34 +4,42 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+import 'package:travel_wisata/models/transaction_model.dart';
+
 class JemputPenumpang extends Equatable {
   String idTravel;
   String idInvoice;
-  String idUser;
   String lat;
   String lng;
   int status;
   String alamat;
+  List<Traveler> listTraveler;
+  String namaUser;
+  String phoneUser;
 
   JemputPenumpang({
     required this.idTravel,
     required this.idInvoice,
-    required this.idUser,
     required this.lat,
     required this.lng,
     required this.status,
     required this.alamat,
+    required this.listTraveler,
+    required this.namaUser,
+    required this.phoneUser,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'idTravel': idTravel,
       'idInvoice': idInvoice,
-      'idUser': idUser,
       'lat': lat,
       'lng': lng,
       'status': status,
       'alamat': alamat,
+      'listTraveler': listTraveler.map((x) => x.toMap()).toList(),
+      'namaUser': namaUser,
+      'phoneUser': phoneUser,
     };
   }
 
@@ -39,11 +47,14 @@ class JemputPenumpang extends Equatable {
     return JemputPenumpang(
       idTravel: map['idTravel'],
       idInvoice: map['idInvoice'],
-      idUser: map['idUser'],
       lat: map['lat'],
       lng: map['lng'],
       status: map['status'],
       alamat: map['alamat'],
+      listTraveler: List<Traveler>.from(
+          map['listTraveler']?.map((x) => Traveler.fromMap(x))),
+      namaUser: map['namaUser'],
+      phoneUser: map['phoneUser'],
     );
   }
 
@@ -57,16 +68,43 @@ class JemputPenumpang extends Equatable {
     return [
       idTravel,
       idInvoice,
-      idUser,
       lat,
       lng,
       status,
       alamat,
+      listTraveler,
+      namaUser,
+      phoneUser,
     ];
   }
 
   @override
   bool get stringify => true;
+
+  JemputPenumpang copyWith({
+    String? idTravel,
+    String? idInvoice,
+    String? idUser,
+    String? lat,
+    String? lng,
+    int? status,
+    String? alamat,
+    List<Traveler>? listTraveler,
+    String? namaUser,
+    String? phoneUser,
+  }) {
+    return JemputPenumpang(
+      idTravel: idTravel ?? this.idTravel,
+      idInvoice: idInvoice ?? this.idInvoice,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng,
+      status: status ?? this.status,
+      alamat: alamat ?? this.alamat,
+      listTraveler: listTraveler ?? this.listTraveler,
+      namaUser: namaUser ?? this.namaUser,
+      phoneUser: phoneUser ?? this.phoneUser,
+    );
+  }
 }
 
 class AlamatKoordinat {
