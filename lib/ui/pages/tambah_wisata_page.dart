@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_wisata/cubit/wisata_cubit.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
+import 'package:travel_wisata/services/user_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
@@ -30,6 +31,8 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
   final biayaController = TextEditingController(text: '');
 
   final deskripsiHariController = TextEditingController(text: '');
+
+  final pemanduController = TextEditingController(text: '');
 
   final _picker = ImagePicker();
   String imageUrl = '';
@@ -160,7 +163,8 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
               backgroundColor: greenColor,
               content: Text(state.response),
             ));
-          } else if (state is WisataFailed) {
+            Navigator.pop(context);
+          } else if (state is WisataFailedAdd) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: redColor,
               content: Text(state.error),
@@ -168,7 +172,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
           }
         },
         builder: (context, state) {
-          if (state is WisataLoading) {
+          if (state is WisataLoadingAdd) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -181,31 +185,82 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                 right: 20,
                 bottom: 30,
               ),
-              onPressed: () {
-                if (namaController.text.isEmpty ||
-                    biayaController.text.isEmpty ||
-                    deskripsiHariController.text.isEmpty ||
-                    imageUrl.isEmpty ||
-                    dataList.isEmpty) {
+              onPressed: () async {
+                String errorMsg = '';
+                var nama = namaController.text;
+                var biaya = biayaController.text;
+                var deskripsi = deskripsiHariController.text;
+                var pemandu = pemanduController.text;
+                var pemanduCheck =
+                    await UserService().checkUserAvailable(pemandu, 'PEMANDU');
+
+                log('message $pemanduCheck');
+
+                if (nama.isEmpty) {
+                  errorMsg = "Kolom nama tidak boleh kosong";
+                } else if (biaya.isEmpty) {
+                  errorMsg = "Kolom biaya tidak boleh kosong";
+                } else if (deskripsi.isEmpty) {
+                  errorMsg =
+                      "Kolom deskripsi lama perjalanan tidak boleh kosong";
+                } else if (imageUrl.isEmpty) {
+                  errorMsg = "Upload cover terlebih dahulu";
+                } else if (dataList.isEmpty) {
+                  errorMsg = "Agenda harus diisi";
+                } else if (pemandu.isEmpty) {
+                  errorMsg = "Kolom pemandu tidak boleh kosong";
+                } else if (pemanduCheck == false) {
+                  errorMsg = "Data pemandu tidak ditemukan";
+                }
+
+                if (errorMsg.isNotEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                      content: Text(errorMsg),
                       backgroundColor: redColor,
-                      content: const Text(
-                        'Mohon periksa kembali data yang akan ditambahkan',
-                      ),
                     ),
                   );
                 } else {
                   context.read<WisataCubit>().addWisata(
-                      nama: namaController.text,
-                      biaya: biayaController.text,
-                      deskripsiHari: deskripsiHariController.text,
-                      imageUrl: imageUrl,
-                      agenda: dataList);
-                  Navigator.pop(context);
+                        nama: namaController.text,
+                        biaya: biayaController.text,
+                        deskripsiHari: deskripsiHariController.text,
+                        imageUrl: imageUrl,
+                        agenda: dataList,
+                        pemandu: pemandu,
+                      );
                 }
               });
         },
+      );
+    }
+
+    Widget inputPemandu() {
+      return SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: TextFormField(
+          cursorColor: Colors.black,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.done,
+          style: blackTextStyle.copyWith(
+            fontWeight: regular,
+            fontSize: 14,
+          ),
+          controller: pemanduController,
+          decoration: InputDecoration(
+            label: Text(
+              'Email Pemandu',
+              style: greyTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: regular,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+        ),
       );
     }
 
@@ -244,6 +299,10 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                     label: 'Deskripsi Lama Perjalanan',
                     controller: deskripsiHariController,
                   ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  inputPemandu(),
                   const SizedBox(
                     height: 15,
                   ),

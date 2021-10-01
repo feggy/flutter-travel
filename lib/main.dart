@@ -29,6 +29,7 @@ import 'package:travel_wisata/ui/pages/splash_page.dart';
 import 'package:travel_wisata/ui/pages/sukses_pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
+import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_admin_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_page.dart';
 
@@ -74,6 +75,7 @@ class MyApp extends StatelessWidget {
           '/pemandu': (context) => const DaftarPemanduPage(),
           '/supir': (context) => const DaftarSupirPage(),
           '/wisata_admin': (context) => const WisataAdminPage(),
+          '/tambah_wisata': (context) => const TambahWisataPage(),
           '/tambah_agenda': (context) => const TambahAgendaPage(),
           '/bus_admin': (context) => const BusAdminPage(),
           '/tambah_bus': (context) => const TambahBusPage(),

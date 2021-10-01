@@ -31,7 +31,8 @@ class _BusAdminPageState extends State<BusAdminPage> {
       return CustomButton(
         title: 'TAMBAH',
         onPressed: () {
-          Navigator.pushNamed(context, '/tambah_bus');
+          Navigator.pushNamed(context, '/tambah_bus')
+              .then((value) => context.read<TravelCubit>().getListTravel());
         },
         margin: const EdgeInsets.only(
           left: 20,

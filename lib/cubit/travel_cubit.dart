@@ -17,6 +17,7 @@ class TravelCubit extends Cubit<TravelState> {
     required String spesifikasi,
     required String fasilitas,
     required String imageUrl,
+    required String supir,
   }) async {
     emit(TravelLoading());
 
@@ -30,6 +31,7 @@ class TravelCubit extends Cubit<TravelState> {
       spesifikasi: spesifikasi,
       fasilitas: fasilitas,
       imageUrl: imageUrl,
+      supir: supir,
     );
 
     await TravelService().addTravel(data: data).then((value) {

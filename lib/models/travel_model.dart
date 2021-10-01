@@ -10,6 +10,7 @@ class TravelModel extends Equatable {
   final String spesifikasi;
   final String fasilitas;
   final String imageUrl;
+  final String supir;
 
   const TravelModel({
     required this.id,
@@ -19,6 +20,7 @@ class TravelModel extends Equatable {
     required this.spesifikasi,
     required this.fasilitas,
     required this.imageUrl,
+    required this.supir,
   });
 
   @override
@@ -39,6 +41,7 @@ class TravelModel extends Equatable {
       'spesifikasi': spesifikasi,
       'fasilitas': fasilitas,
       'imageUrl': imageUrl,
+      'supir': supir,
     };
   }
 
@@ -51,6 +54,7 @@ class TravelModel extends Equatable {
       spesifikasi: map['spesifikasi'],
       fasilitas: map['fasilitas'],
       imageUrl: map['imageUrl'],
+      supir: map['supir'],
     );
   }
 

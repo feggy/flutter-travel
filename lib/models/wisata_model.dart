@@ -9,6 +9,7 @@ class WisataModel extends Equatable {
   final String deskripsiHari;
   final String imageUrl;
   List<HariModel> agenda;
+  final String pemandu;
 
   WisataModel({
     required this.id,
@@ -17,9 +18,8 @@ class WisataModel extends Equatable {
     required this.deskripsiHari,
     required this.imageUrl,
     required this.agenda,
+    required this.pemandu,
   });
-
-  var mapAgenda = {};
 
   factory WisataModel.fromJson(Map<String, dynamic> json) => WisataModel(
         id: json['id'],
@@ -30,6 +30,7 @@ class WisataModel extends Equatable {
         agenda: List.from(json['agenda'])
             .map((e) => HariModel.fromJson(e))
             .toList(),
+        pemandu: json['pemandu'],
       );
 
   @override

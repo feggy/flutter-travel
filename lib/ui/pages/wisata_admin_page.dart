@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_wisata/cubit/wisata_cubit.dart';
@@ -20,12 +22,29 @@ class WisataAdminPage extends StatefulWidget {
 class _WisataAdminPageState extends State<WisataAdminPage> {
   @override
   void initState() {
-    context.read<WisataCubit>().getListWisata();
     super.initState();
+    context.read<WisataCubit>().getListWisata();
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget buttonTambah() {
+      return Padding(
+        padding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 30,
+        ),
+        child: CustomButton(
+          title: 'TAMBAH',
+          onPressed: () {
+            Navigator.pushNamed(context, '/tambah_wisata')
+                .then((value) => context.read<WisataCubit>().getListWisata());
+          },
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBarItem(title: 'Daftar Wisata'),
       backgroundColor: whiteColor,
@@ -34,6 +53,7 @@ class _WisataAdminPageState extends State<WisataAdminPage> {
           Expanded(
             child: BlocBuilder<WisataCubit, WisataState>(
               builder: (context, state) {
+                log('message $state');
                 if (state is WisataSuccess) {
                   return ListView(
                     padding: const EdgeInsets.only(
@@ -71,26 +91,7 @@ class _WisataAdminPageState extends State<WisataAdminPage> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              bottom: 30,
-            ),
-            child: CustomButton(
-              title: 'TAMBAH',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const TambahWisataPage(),
-                  ),
-                ).then((value) {
-                  context.read<WisataCubit>().getListWisata();
-                });
-              },
-            ),
-          ),
+          buttonTambah(),
         ],
       ),
     );

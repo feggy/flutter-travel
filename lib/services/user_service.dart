@@ -66,4 +66,24 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<bool> checkUserAvailable(String email, String role) async {
+    try {
+      var result = await _userReference
+          .where('email', isEqualTo: email)
+          .where('role', isEqualTo: role)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          return true;
+        } else {
+          return false;
+        }
+      }).catchError((onError) => log('ERROR checkUserAvailable $onError'));
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

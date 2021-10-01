@@ -20,6 +20,17 @@ class WisataSuccess extends WisataState {
   List<Object> get props => [data];
 }
 
+class WisataFailed extends WisataState {
+  final String error;
+
+  const WisataFailed(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
+class WisataLoadingAdd extends WisataState {}
+
 class WisataSuccessAdd extends WisataState {
   final String response;
 
@@ -29,10 +40,10 @@ class WisataSuccessAdd extends WisataState {
   List<Object> get props => [response];
 }
 
-class WisataFailed extends WisataState {
+class WisataFailedAdd extends WisataState {
   final String error;
 
-  const WisataFailed(this.error);
+  const WisataFailedAdd(this.error);
 
   @override
   List<Object> get props => [error];

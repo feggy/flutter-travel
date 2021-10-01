@@ -30,6 +30,7 @@ class WisataService {
         'deskripsiHari': data.deskripsiHari,
         'imageUrl': data.imageUrl,
         'agenda': agendaMap,
+        'pemandu': data.pemandu,
       }).then((value) {
         log('wisata berhasil di tambahkan');
         response = 'Berhasil menambahkan data wisata baru';

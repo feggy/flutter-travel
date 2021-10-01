@@ -16,9 +16,10 @@ class WisataCubit extends Cubit<WisataState> {
     required String deskripsiHari,
     required String imageUrl,
     required List<HariModel> agenda,
+    required String pemandu,
   }) async {
     try {
-      emit(WisataLoading());
+      emit(WisataLoadingAdd());
 
       int randomNumber = Random().nextInt(9999999);
       String id = 'wisata-$randomNumber';
@@ -29,16 +30,17 @@ class WisataCubit extends Cubit<WisataState> {
         deskripsiHari: deskripsiHari,
         imageUrl: imageUrl,
         agenda: agenda,
+        pemandu: pemandu,
       );
 
       await WisataService()
           .addWisata(data: wisata)
           .then((value) => emit(WisataSuccessAdd(value)))
           .catchError((onError) {
-        emit(WisataFailed(onError));
+        emit(WisataFailedAdd(onError));
       });
     } catch (e) {
-      emit(WisataFailed(e.toString()));
+      emit(WisataFailedAdd(e.toString()));
     }
   }
 

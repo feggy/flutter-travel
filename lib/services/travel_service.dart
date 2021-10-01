@@ -21,7 +21,8 @@ class TravelService {
             'kelas': data.kelas,
             'spesifikasi': data.spesifikasi,
             'fasilitas': data.fasilitas,
-            'imageUrl': data.imageUrl
+            'imageUrl': data.imageUrl,
+            'supir': data.supir,
           })
           .then((value) => response = 'Berhasil menambahkan data travel')
           .catchError((onError) {

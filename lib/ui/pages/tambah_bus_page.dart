@@ -6,8 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_wisata/cubit/travel_cubit.dart';
+import 'package:travel_wisata/services/user_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
@@ -32,6 +34,8 @@ class _TambahBusPageState extends State<TambahBusPage> {
   final spesifikasiController = TextEditingController(text: '');
 
   final fasilitasController = TextEditingController(text: '');
+
+  final supirController = TextEditingController(text: '');
 
   final _picker = ImagePicker();
   String imageUrl = '';
@@ -136,7 +140,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
 
           return CustomButton(
             title: 'SIMPAN',
-            onPressed: () {
+            onPressed: () async {
               String errorMsg = '';
 
               var nama = namaController.text;
@@ -144,6 +148,9 @@ class _TambahBusPageState extends State<TambahBusPage> {
               var kelas = classController.text;
               var spesifikasi = spesifikasiController.text;
               var fasilitas = fasilitasController.text;
+              var supir = supirController.text;
+              var supirCheck = await UserService()
+                  .checkUserAvailable(supirController.text, 'SUPIR');
 
               if (nama.isEmpty) {
                 errorMsg = "Kolom nama tidak boleh kosong";
@@ -157,6 +164,10 @@ class _TambahBusPageState extends State<TambahBusPage> {
                 errorMsg = "Kolom fasilitas tidak boleh kosong";
               } else if (imageUrl.isEmpty) {
                 errorMsg = "foto belum dipilih";
+              } else if (supir.isEmpty) {
+                errorMsg = "Kolom email supir tidak boleh kosong";
+              } else if (supirCheck == false) {
+                errorMsg = "Data supir tidak ditemukan";
               }
 
               if (errorMsg.isNotEmpty) {
@@ -174,6 +185,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
                       spesifikasi: spesifikasi,
                       fasilitas: fasilitas,
                       imageUrl: imageUrl,
+                      supir: supir,
                     );
               }
             },
@@ -185,6 +197,35 @@ class _TambahBusPageState extends State<TambahBusPage> {
             ),
           );
         },
+      );
+    }
+
+    Widget inputSupir() {
+      return SizedBox(
+        width: double.infinity,
+        height: 50,
+        child: TextFormField(
+          cursorColor: Colors.black,
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.done,
+          style: blackTextStyle.copyWith(
+            fontWeight: regular,
+            fontSize: 14,
+          ),
+          controller: supirController,
+          decoration: InputDecoration(
+            label: Text(
+              'Email Supir',
+              style: greyTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: regular,
+              ),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+            ),
+          ),
+        ),
       );
     }
 
@@ -233,6 +274,10 @@ class _TambahBusPageState extends State<TambahBusPage> {
                       inputType: TextInputType.multiline,
                       controller: fasilitasController,
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    inputSupir(),
                     const SizedBox(
                       height: 20,
                     ),
