@@ -24,6 +24,7 @@ class TransactionModel extends Equatable {
   String namaUser;
   String phoneUser;
   String timeCreated;
+  String jobFor;
 
   TransactionModel({
     required this.idInvoice,
@@ -37,6 +38,7 @@ class TransactionModel extends Equatable {
     required this.namaUser,
     required this.phoneUser,
     required this.timeCreated,
+    required this.jobFor,
   });
 
   @override
@@ -69,6 +71,7 @@ class TransactionModel extends Equatable {
       'namaUser': namaUser,
       'phoneUser': phoneUser,
       'timeCreated': timeCreated,
+      'jobFor': jobFor,
     };
   }
 
@@ -86,6 +89,7 @@ class TransactionModel extends Equatable {
       namaUser: map['namaUser'],
       phoneUser: map['phoneUser'],
       timeCreated: map['timeCreated'],
+      jobFor: map['jobFor'],
     );
   }
 

@@ -23,6 +23,7 @@ import 'package:travel_wisata/ui/pages/detail_transaction_admin_page.dart';
 import 'package:travel_wisata/ui/pages/konfirmasi_pesanan_page.dart';
 import 'package:travel_wisata/ui/pages/login_page.dart';
 import 'package:travel_wisata/ui/pages/main_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu_page.dart';
 import 'package:travel_wisata/ui/pages/pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/register_page.dart';
 import 'package:travel_wisata/ui/pages/splash_page.dart';
@@ -82,6 +83,7 @@ class MyApp extends StatelessWidget {
           '/transaksi_admin': (context) => const TransactionAdminPage(),
           '/detail_transaksi_admin': (context) =>
               const DetailTransactionAdminPage(),
+          '/pemandu_home': (context) => const PemanduPage(),
         },
       ),
     );

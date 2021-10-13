@@ -185,10 +185,13 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                 } else {
                   var idInvoice = 'invoice-${Random().nextInt(9999999)}';
                   var idTravel = '';
+                  var jobFor = '';
                   if (widget.dataTravel != null) {
                     idTravel = widget.dataTravel!.id;
+                    jobFor = widget.dataTravel!.supir;
                   } else {
                     idTravel = widget.dataWisata!.id;
+                    jobFor = widget.dataWisata!.pemandu;
                   }
 
                   var transaction = TransactionModel(
@@ -203,6 +206,7 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                     phoneUser: phone,
                     namaUser: name,
                     timeCreated: DateTime.now().toString(),
+                    jobFor: jobFor,
                   );
                   Navigator.pushNamed(context, '/konfirmasi_pesanan',
                       arguments: {

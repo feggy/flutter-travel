@@ -35,6 +35,7 @@ class TransactionService {
         'namaUser': data.namaUser,
         'phoneUser': data.phoneUser,
         'timeCreated': data.timeCreated,
+        'jobFor': data.jobFor,
       }).then((value) {
         response = 'Berhasil melakukan pembayaran';
         log(response);
@@ -81,6 +82,35 @@ class TransactionService {
       return listRes;
     } catch (e) {
       log('error $e');
+      rethrow;
+    }
+  }
+
+  Future<List<ResTransaciton>> getListJob({required String email}) async {
+    try {
+      QuerySnapshot result = await _ref.where('jobFor', isEqualTo: email).get();
+
+      List<TransactionModel> listTransaction = result.docs
+          .map(
+              (e) => TransactionModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      List<ResTransaciton> listRes = [];
+
+      for (var element in listTransaction) {
+        if (element.category == 'TRAVEL') {
+          TravelModel travel =
+              await TravelService().getListTravelById(id: element.idTravel);
+          listRes.add(ResTransaciton(transaction: element, travel: travel));
+        } else {
+          WisataModel wisata =
+              await WisataService().getListWisataById(id: element.idTravel);
+          listRes.add(ResTransaciton(transaction: element, wisata: wisata));
+        }
+      }
+
+      return listRes;
+    } catch (e) {
       rethrow;
     }
   }

@@ -52,6 +52,20 @@ class TransactionCubit extends Cubit<TransactionState> {
     }
   }
 
+  void getListJob({required String email}) async {
+    try {
+      emit(TransactionLoadingJob());
+
+      await TransactionService().getListJob(email: email).then((value) {
+        if (value.isNotEmpty) {
+          emit(TransactionSuccessJob(value));
+        } else {
+          emit(const TransactionFailedJob('Belum ada pekerjaan'));
+        }
+      }).catchError((onError) => emit(TransactionFailedJob(onError)));
+    } catch (e) {}
+  }
+
   void updateStatus({required String idInvoice, required int status}) async {
     try {
       emit(TransactionLoading());

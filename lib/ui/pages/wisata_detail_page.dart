@@ -8,6 +8,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:travel_wisata/models/role_enum.dart';
+import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
@@ -19,10 +20,13 @@ import 'isi_data_wisata_page.dart';
 class WisataDetailPage extends StatefulWidget {
   final WisataModel data;
   final ROLE role;
-  const WisataDetailPage({
+  ResTransaciton? res;
+
+  WisataDetailPage({
     Key? key,
     required this.data,
     required this.role,
+    this.res,
   }) : super(key: key);
 
   @override
@@ -391,6 +395,23 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
+    Widget footerPemandu() {
+      if (widget.res!.transaction!.status == 1) {
+        return CustomButton(
+          title: 'MULAI WISATA',
+          onPressed: () {
+            launchUrl('0.466052', '101.3560171');
+          },
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 20,
+          ),
+        );
+      }
+      return const SizedBox();
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -429,7 +450,8 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
             widget.role == ROLE.user
                 ? footerPesan()
                 // footerPesertaWisata(),
-                : const SizedBox()
+                : const SizedBox(),
+            widget.role == ROLE.pemandu ? footerPemandu() : const SizedBox(),
           ],
         ),
       ),
