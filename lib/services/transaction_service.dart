@@ -51,13 +51,22 @@ class TransactionService {
   }
 
   Future<List<ResTransaciton>> getListTransaction(
-      {required String email}) async {
+      {required String email, String? page}) async {
     try {
       QuerySnapshot result =
           await _ref.where('emailUser', isEqualTo: email).get();
 
       if (email == 'admin') {
         result = await _ref.get();
+      }
+
+      if (page == 'riwayat') {
+        result = await _ref.where('emailUser', isEqualTo: email).get();
+      } else if (page == 'berlangsung') {
+        result = await _ref
+            .where('emailUser', isEqualTo: email)
+            .where('status', isEqualTo: 2)
+            .get();
       }
 
       List<TransactionModel> listTransaction = result.docs
@@ -67,15 +76,31 @@ class TransactionService {
 
       List<ResTransaciton> listRes = [];
 
-      for (var element in listTransaction) {
-        if (element.category == 'TRAVEL') {
-          TravelModel travel =
-              await TravelService().getListTravelById(id: element.idTravel);
-          listRes.add(ResTransaciton(transaction: element, travel: travel));
-        } else {
-          WisataModel wisata =
-              await WisataService().getListWisataById(id: element.idTravel);
-          listRes.add(ResTransaciton(transaction: element, wisata: wisata));
+      if (page == 'riwayat') {
+        for (var element in listTransaction) {
+          if (element.status != 2) {
+            if (element.category == 'TRAVEL') {
+              TravelModel travel =
+                  await TravelService().getListTravelById(id: element.idTravel);
+              listRes.add(ResTransaciton(transaction: element, travel: travel));
+            } else {
+              WisataModel wisata =
+                  await WisataService().getListWisataById(id: element.idTravel);
+              listRes.add(ResTransaciton(transaction: element, wisata: wisata));
+            }
+          }
+        }
+      } else {
+        for (var element in listTransaction) {
+          if (element.category == 'TRAVEL') {
+            TravelModel travel =
+                await TravelService().getListTravelById(id: element.idTravel);
+            listRes.add(ResTransaciton(transaction: element, travel: travel));
+          } else {
+            WisataModel wisata =
+                await WisataService().getListWisataById(id: element.idTravel);
+            listRes.add(ResTransaciton(transaction: element, wisata: wisata));
+          }
         }
       }
 

@@ -17,7 +17,7 @@ class HariAgendaItem extends StatelessWidget {
         'Hari ke ${data.dayOfNumber}',
         style: blackTextStyle.copyWith(
           fontSize: 12,
-          fontWeight: semiBold,
+          fontWeight: medium,
         ),
       );
     }

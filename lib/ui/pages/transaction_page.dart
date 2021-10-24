@@ -8,6 +8,7 @@ import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/bus_detail_page.dart';
+import 'package:travel_wisata/ui/pages/kendali_perjalan.dart';
 import 'package:travel_wisata/ui/widgets/model_2_card.dart';
 import 'package:travel_wisata/ui/widgets/not_found_item.dart';
 
@@ -24,7 +25,9 @@ class _TransactionPageState extends State<TransactionPage> {
     await SharedPreferences.getInstance().then((value) {
       email = value.getString('email') ?? '';
     });
-    context.read<TransactionCubit>().getListTransaction(email: email);
+    context
+        .read<TransactionCubit>()
+        .getListTransaction(email: email, page: 'berlangsung');
   }
 
   @override
@@ -82,29 +85,43 @@ class _TransactionPageState extends State<TransactionPage> {
                           imageUrl = e.wisata!.imageUrl;
                         }
 
-                        return InkWell(
-                          onTap: () {
-                            if (e.transaction!.category == 'TRAVEL') {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => BusDetailPage(
-                                    data: e.travel!,
-                                    role: ROLE.user,
-                                    res: e,
+                        if (status == 2) {
+                          return InkWell(
+                            onTap: () {
+                              if (e.transaction!.category == 'TRAVEL') {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BusDetailPage(
+                                      data: e.travel!,
+                                      role: ROLE.user,
+                                      res: e,
+                                    ),
                                   ),
-                                ),
-                              );
-                            }
-                          },
-                          child: Model2Card(
-                            nama: nama,
-                            harga: harga,
-                            deskripsi: '',
-                            imageUrl: imageUrl,
-                            status: status,
-                          ),
-                        );
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => KendaliPerjalananPage(
+                                      category: 'WISATA',
+                                      res: e,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            child: Model2Card(
+                              nama: nama,
+                              harga: harga,
+                              deskripsi: '',
+                              imageUrl: imageUrl,
+                              status: status,
+                            ),
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
                       }).toList(),
                     ),
                   ),

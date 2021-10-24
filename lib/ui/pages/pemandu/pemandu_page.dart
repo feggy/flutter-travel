@@ -5,6 +5,7 @@ import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/bus_detail_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu/halaman_kendali_pemandu.dart';
 import 'package:travel_wisata/ui/pages/wisata_detail_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,19 +93,21 @@ class _PemanduPageState extends State<PemanduPage> {
                                 }
 
                                 return InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     if (e.transaction!.category == 'WISATA') {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              WisataDetailPage(
-                                            data: e.wisata!,
-                                            role: ROLE.pemandu,
-                                            res: e,
-                                          ),
-                                        ),
-                                      );
+                                      await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    HalamanKendaliPemandu(
+                                                  data: e.wisata!,
+                                                  role: ROLE.pemandu,
+                                                  res: e,
+                                                ),
+                                              ))
+                                          .then((value) => context
+                                              .read<TransactionCubit>()
+                                              .getListJob(email: email));
                                     }
                                   },
                                   child: Model2Card(

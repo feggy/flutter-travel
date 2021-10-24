@@ -30,12 +30,14 @@ class TransactionCubit extends Cubit<TransactionState> {
     }
   }
 
-  void getListTransaction({required String email}) async {
+  void getListTransaction({required String email, String? page}) async {
     try {
       emit(TransactionInitial());
       emit(TransactionLoading());
 
-      await TransactionService().getListTransaction(email: email).then((value) {
+      await TransactionService()
+          .getListTransaction(email: email, page: page)
+          .then((value) {
         log(value.toString());
         if (value.isNotEmpty) {
           emit(TransactionSuccess(value));
@@ -63,12 +65,14 @@ class TransactionCubit extends Cubit<TransactionState> {
           emit(const TransactionFailedJob('Belum ada pekerjaan'));
         }
       }).catchError((onError) => emit(TransactionFailedJob(onError)));
-    } catch (e) {}
+    } catch (e) {
+      rethrow;
+    }
   }
 
   void updateStatus({required String idInvoice, required int status}) async {
     try {
-      emit(TransactionLoading());
+      emit(TransactionLoadingAdd());
 
       await TransactionService()
           .updateStatus(idInvoice: idInvoice, status: status)

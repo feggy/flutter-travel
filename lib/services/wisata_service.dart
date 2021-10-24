@@ -1,10 +1,14 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_wisata/models/lokasi_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 
 class WisataService {
   final CollectionReference _wisataReference =
       FirebaseFirestore.instance.collection('wisata');
+
+  final CollectionReference _locationReference =
+      FirebaseFirestore.instance.collection('lokasi');
 
   Future<String> addWisata({required WisataModel data}) async {
     try {
@@ -71,6 +75,71 @@ class WisataService {
           .toList();
 
       return data[0];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<LokasiModel> getPemanduLokasi(
+      {required String idWisata, required String pemandu}) async {
+    try {
+      QuerySnapshot result = await _locationReference
+          .where('idWisata', isEqualTo: idWisata)
+          .where('pemandu', isEqualTo: pemandu)
+          .get();
+
+      var data = result.docs
+          .map((e) => LokasiModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      return data[0];
+    } catch (e) {
+      log('_ ERR $e');
+      rethrow;
+    }
+  }
+
+  Future<String> shareLocation({required LokasiModel data}) async {
+    try {
+      String response = '';
+
+      QuerySnapshot result = await _locationReference
+          .where('idWisata', isEqualTo: data.idWisata)
+          .where('pemandu', isEqualTo: data.pemandu)
+          .get();
+
+      var res = result.docs
+          .map((e) => LokasiModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      if (res.isEmpty) {
+        await _locationReference.add({
+          'pemandu': data.pemandu,
+          'idWisata': data.idWisata,
+          'lat': data.lat,
+          'lng': data.lng,
+          'timeCreated': data.timeCreated,
+        }).then((value) {
+          log('Sukses bagikan lokasi');
+          response = 'Lokasi berhasil dibagikan';
+        }).catchError((onError) {
+          log('ERROR $onError');
+          response = 'Terjadi masalah $onError';
+        });
+      } else {
+        await _locationReference.doc(result.docs[0].id).update({
+          'lat': data.lat,
+          'lng': data.lng,
+        }).then((value) {
+          log('Sukses memperbarui lokasi');
+          response = 'Lokasi berhasil diperbarui';
+        }).catchError((onError) {
+          log('ERROR $onError');
+          response = 'Terjadi masalah $onError';
+        });
+      }
+
+      return response;
     } catch (e) {
       rethrow;
     }

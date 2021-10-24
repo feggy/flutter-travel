@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
@@ -14,6 +17,7 @@ import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'isi_data_wisata_page.dart';
 
@@ -137,13 +141,13 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
           Text(
             'Agenda Perjalanan',
             style: blackTextStyle.copyWith(
-              fontSize: 14,
-              fontWeight: medium,
+              fontSize: 12,
+              fontWeight: semiBold,
             ),
             textAlign: TextAlign.start,
           ),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
           if (widget.data.agenda.isNotEmpty)
             Column(
@@ -395,23 +399,6 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
-    Widget footerPemandu() {
-      if (widget.res!.transaction!.status == 1) {
-        return CustomButton(
-          title: 'MULAI WISATA',
-          onPressed: () {
-            launchUrl('0.466052', '101.3560171');
-          },
-          margin: const EdgeInsets.only(
-            left: 20,
-            right: 20,
-            bottom: 20,
-          ),
-        );
-      }
-      return const SizedBox();
-    }
-
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -447,11 +434,10 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
                 ),
               ),
             ),
-            widget.role == ROLE.user
+            widget.role == ROLE.user && widget.res == null
                 ? footerPesan()
                 // footerPesertaWisata(),
                 : const SizedBox(),
-            widget.role == ROLE.pemandu ? footerPemandu() : const SizedBox(),
           ],
         ),
       ),

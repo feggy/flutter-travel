@@ -124,7 +124,7 @@ class LoginPage extends StatelessWidget {
         children: [
           Center(
             child: Text(
-              'Tidak memiliki akun?',
+              'Belum memiliki akun?',
               style: blackTextStyle.copyWith(
                 fontWeight: light,
                 fontSize: 14,

@@ -12,18 +12,21 @@ import 'package:travel_wisata/cubit/supir_cubit.dart';
 import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/cubit/travel_cubit.dart';
 import 'package:travel_wisata/cubit/wisata_cubit.dart';
-import 'package:travel_wisata/ui/pages/admin_page.dart';
-import 'package:travel_wisata/ui/pages/bus_admin_page.dart';
+import 'package:travel_wisata/ui/pages/admin/admin_page.dart';
+import 'package:travel_wisata/ui/pages/admin/bus_admin_page.dart';
 import 'package:travel_wisata/ui/pages/bus_page.dart';
 import 'package:travel_wisata/ui/pages/daftar_pemandu_page.dart';
 import 'package:travel_wisata/ui/pages/daftar_supir_page.dart';
-import 'package:travel_wisata/ui/pages/daftar_transaksi_admin_page.dart';
+import 'package:travel_wisata/ui/pages/admin/daftar_transaksi_admin_page.dart';
 import 'package:travel_wisata/ui/pages/data_traveler_page.dart';
-import 'package:travel_wisata/ui/pages/detail_transaction_admin_page.dart';
+import 'package:travel_wisata/ui/pages/admin/detail_transaction_admin_page.dart';
 import 'package:travel_wisata/ui/pages/konfirmasi_pesanan_page.dart';
 import 'package:travel_wisata/ui/pages/login_page.dart';
 import 'package:travel_wisata/ui/pages/main_page.dart';
-import 'package:travel_wisata/ui/pages/pemandu_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu/halaman_kendali_pemandu.dart';
+import 'package:travel_wisata/ui/pages/pemandu/pemandu_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu/sukses_mulai_wisata.dart';
+import 'package:travel_wisata/ui/pages/pemandu/sukses_selesai_wisata.dart';
 import 'package:travel_wisata/ui/pages/pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/register_page.dart';
 import 'package:travel_wisata/ui/pages/splash_page.dart';
@@ -31,7 +34,7 @@ import 'package:travel_wisata/ui/pages/sukses_pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
-import 'package:travel_wisata/ui/pages/wisata_admin_page.dart';
+import 'package:travel_wisata/ui/pages/admin/wisata_admin_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_page.dart';
 
 void main() async {
@@ -84,6 +87,8 @@ class MyApp extends StatelessWidget {
           '/detail_transaksi_admin': (context) =>
               const DetailTransactionAdminPage(),
           '/pemandu_home': (context) => const PemanduPage(),
+          '/sukses_wisata': (context) => const SuksesMulaiWisata(),
+          '/akhiri_wisata': (context) => const SuksesSelesaiWisata(),
         },
       ),
     );

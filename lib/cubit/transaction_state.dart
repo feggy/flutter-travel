@@ -40,6 +40,8 @@ class TransactionSuccessAdd extends TransactionState {
   List<Object> get props => [response];
 }
 
+class TransactionLoadingAdd extends TransactionState {}
+
 class TransactionFailedAdd extends TransactionState {
   final String response;
 

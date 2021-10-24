@@ -406,7 +406,7 @@ class _BusDetailPageState extends State<BusDetailPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    widget.res != null ? jemput() : const SizedBox(),
+                    // widget.res != null ? jemput() : const SizedBox(),
                   ],
                 ),
               ),
