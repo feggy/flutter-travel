@@ -8,7 +8,7 @@ import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/bus_detail_page.dart';
-import 'package:travel_wisata/ui/pages/kendali_perjalan.dart';
+import 'package:travel_wisata/ui/pages/daftar_perjalanan/kendali_perjalan.dart';
 import 'package:travel_wisata/ui/widgets/model_2_card.dart';
 import 'package:travel_wisata/ui/widgets/not_found_item.dart';
 

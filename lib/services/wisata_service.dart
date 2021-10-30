@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:travel_wisata/models/absen_model.dart';
 import 'package:travel_wisata/models/lokasi_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 
@@ -9,6 +10,9 @@ class WisataService {
 
   final CollectionReference _locationReference =
       FirebaseFirestore.instance.collection('lokasi');
+
+  final CollectionReference _absenReference =
+      FirebaseFirestore.instance.collection('absen');
 
   Future<String> addWisata({required WisataModel data}) async {
     try {
@@ -99,6 +103,28 @@ class WisataService {
     }
   }
 
+  Future<Absen> getAbsen({
+    required String idInvoice,
+    required String idWisata,
+    required String pemandu,
+  }) async {
+    try {
+      QuerySnapshot result = await _absenReference
+          .where('idInvoice', isEqualTo: idInvoice)
+          .where('idWisata', isEqualTo: idWisata)
+          .where('pemandu', isEqualTo: pemandu)
+          .get();
+
+      var data = result.docs
+          .map((e) => Absen.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      return data[0];
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<String> shareLocation({required LokasiModel data}) async {
     try {
       String response = '';
@@ -130,6 +156,7 @@ class WisataService {
         await _locationReference.doc(result.docs[0].id).update({
           'lat': data.lat,
           'lng': data.lng,
+          'timeCreated': data.timeCreated,
         }).then((value) {
           log('Sukses memperbarui lokasi');
           response = 'Lokasi berhasil diperbarui';
@@ -140,6 +167,34 @@ class WisataService {
       }
 
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<Absen> absenPeserta({required Absen data}) async {
+    try {
+      String response = '';
+
+      List<Map<String, dynamic>> listAbsen = data.listAbsenPeserta
+          .map((e) => {
+                'nama': e.nama,
+                'status': e.status,
+              })
+          .toList();
+
+      await _absenReference.add({
+        'idInvoice': data.idInvoice,
+        'idWisata': data.idWisata,
+        'pemandu': data.pemandu,
+        'listAbsenPeserta': listAbsen,
+        'updated': data.updated,
+      }).then((value) {
+        response = 'Berhasil mengabsen peserta';
+        log(response);
+      });
+
+      return data;
     } catch (e) {
       rethrow;
     }

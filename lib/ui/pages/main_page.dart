@@ -8,7 +8,7 @@ import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/history_page.dart';
 import 'package:travel_wisata/ui/pages/home_page.dart';
 import 'package:travel_wisata/ui/pages/profile_page.dart';
-import 'package:travel_wisata/ui/pages/transaction_page.dart';
+import 'package:travel_wisata/ui/pages/daftar_perjalanan/transaction_page.dart';
 import 'package:travel_wisata/ui/widgets/bottom_navigation_item.dart';
 
 class MainPage extends StatelessWidget {

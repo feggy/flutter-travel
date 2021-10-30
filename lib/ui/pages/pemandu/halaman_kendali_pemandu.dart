@@ -14,6 +14,7 @@ import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
+import 'package:travel_wisata/ui/pages/pemandu/absen_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_detail_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/model_2_card.dart';
@@ -395,7 +396,16 @@ class _HalamanKendaliPemanduState extends State<HalamanKendaliPemandu> {
                             : Column(
                                 children: [
                                   SingleTextCard(
-                                      text: 'Absen peserta', onPressed: () {}),
+                                      text: 'Absen peserta',
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AbsenPage(res: widget.res!),
+                                          ),
+                                        );
+                                      }),
                                   const SizedBox(height: 10),
                                   SingleTextCard(
                                       text: 'Bagikan lokasi',

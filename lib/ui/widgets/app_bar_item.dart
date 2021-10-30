@@ -9,6 +9,7 @@ class AppBarItem extends StatelessWidget with PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: whiteColor,
+      elevation: 0,
       title: Text(
         title,
         style: blackTextStyle.copyWith(
@@ -16,14 +17,16 @@ class AppBarItem extends StatelessWidget with PreferredSizeWidget {
           fontWeight: semiBold,
         ),
       ),
-      leading: GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Icon(
+      leading: IconButton(
+        icon: Icon(
           Icons.arrow_back_ios_new,
+          size: 15,
           color: blackColor,
         ),
+        splashRadius: 15,
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

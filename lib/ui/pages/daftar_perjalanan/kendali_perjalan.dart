@@ -3,10 +3,14 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:travel_wisata/models/absen_model.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
+import 'package:travel_wisata/ui/pages/daftar_perjalanan/absen_peserta_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_detail_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/model_2_card.dart';
@@ -75,6 +79,86 @@ class KendaliPerjalananPage extends StatelessWidget {
             );
     }
 
+    void permissionRequest() async {
+      var req = await Permission.camera.request();
+      if (req.isPermanentlyDenied) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: Text(
+              'Akses Kamera',
+              style: blackTextStyle.copyWith(
+                fontWeight: semiBold,
+              ),
+            ),
+            content: Text(
+              'Butuh akses kamera',
+              style: blackTextStyle.copyWith(
+                fontWeight: medium,
+              ),
+            ),
+            actions: [
+              TextButton(
+                child: Text(
+                  'Tolak',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: semiBold,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(
+                  'Pengaturan',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: semiBold,
+                  ),
+                ),
+                onPressed: () {
+                  openAppSettings();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    Future<String> startBarcodeStream() async {
+      String barcodeScanRes;
+
+      try {
+        barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+            '#ff6666', 'Cancel', true, ScanMode.QR);
+      } catch (e) {
+        rethrow;
+      }
+
+      return barcodeScanRes;
+    }
+
+    Future<Absen> absenPeserta() async {
+      List<AbsenPeserta> listAbsenPeserta = [];
+
+      for (var element in res.transaction!.listTraveler) {
+        listAbsenPeserta.add(AbsenPeserta(nama: element.nama));
+      }
+
+      return await WisataService().absenPeserta(
+          data: Absen(
+        idInvoice: res.transaction!.idInvoice,
+        idWisata: res.transaction!.idTravel,
+        pemandu: res.transaction!.jobFor,
+        listAbsenPeserta: listAbsenPeserta,
+        updated: DateTime.now(),
+      ));
+    }
+
     return Scaffold(
       appBar: AppBarItem(title: 'Menu Perjalanan'),
       backgroundColor: whiteColor,
@@ -101,7 +185,38 @@ class KendaliPerjalananPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  SingleTextCard(text: 'Absen', onPressed: () {}),
+                  SingleTextCard(
+                      text: 'Absen',
+                      onPressed: () async {
+                        var status = await Permission.camera.status;
+                        if (status.isDenied) {
+                          permissionRequest();
+                        } else {
+                          await startBarcodeStream().then((value) async {
+                            String pemandu = res.transaction!.jobFor;
+                            if (value != '-1') {
+                              if (value == pemandu) {
+                                await absenPeserta().then((value) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AbsenPesertaPage(
+                                        absen: value,
+                                      ),
+                                    ),
+                                  );
+                                });
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: const Text('Format QR salah'),
+                                      backgroundColor: redColor),
+                                );
+                              }
+                            }
+                          });
+                        }
+                      }),
                   const SizedBox(height: 10),
                   SingleTextCard(
                       text: 'Lihat posisi pemandu',
@@ -111,8 +226,7 @@ class KendaliPerjalananPage extends StatelessWidget {
                                 idWisata: res.transaction!.idTravel,
                                 pemandu: res.transaction!.jobFor)
                             .then((value) {
-                          // log('_ $value');
-                          // launchUrl(value.lat, value.lng);
+                          launchUrl(value.lat, value.lng);
                         }).catchError((onError) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
