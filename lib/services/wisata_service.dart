@@ -103,28 +103,6 @@ class WisataService {
     }
   }
 
-  Future<Absen> getAbsen({
-    required String idInvoice,
-    required String idWisata,
-    required String pemandu,
-  }) async {
-    try {
-      QuerySnapshot result = await _absenReference
-          .where('idInvoice', isEqualTo: idInvoice)
-          .where('idWisata', isEqualTo: idWisata)
-          .where('pemandu', isEqualTo: pemandu)
-          .get();
-
-      var data = result.docs
-          .map((e) => Absen.fromMap(e.data() as Map<String, dynamic>))
-          .toList();
-
-      return data[0];
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   Future<String> shareLocation({required LokasiModel data}) async {
     try {
       String response = '';
@@ -195,6 +173,70 @@ class WisataService {
       });
 
       return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<Absen>> getAbsen({
+    required String idInvoice,
+    required String idWisata,
+    required String pemandu,
+  }) async {
+    try {
+      QuerySnapshot result = await _absenReference
+          .orderBy('updated', descending: true)
+          .where('idInvoice', isEqualTo: idInvoice)
+          .where('idWisata', isEqualTo: idWisata)
+          .where('pemandu', isEqualTo: pemandu)
+          .get();
+
+      List<Absen> data = result.docs
+          .map((e) => Absen.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> updateAbsen(
+      {required String idInvoice,
+      required String idWisata,
+      required String pemandu,
+      required DateTime updated,
+      required List<AbsenPeserta> listAbsen}) async {
+    try {
+      String response = '';
+      var result = await _absenReference
+          .where('idInvoice', isEqualTo: idInvoice)
+          .where('idWisata', isEqualTo: idWisata)
+          .where('pemandu', isEqualTo: pemandu)
+          .where('updated', isEqualTo: updated)
+          .get();
+
+      List<Map<String, dynamic>> listAbsenMap = listAbsen
+          .map((e) => {
+                'nama': e.nama,
+                'status': e.status,
+              })
+          .toList();
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _absenReference
+              .doc(id)
+              .update({'listAbsenPeserta': listAbsenMap}).then((value) {
+            response = 'Absen berhasil disimpan';
+          }).catchError((onError) {
+            response = 'ERROR $onError';
+          });
+        }
+      }
+
+      return response;
     } catch (e) {
       rethrow;
     }

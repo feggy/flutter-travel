@@ -6,6 +6,7 @@ import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/pemandu/daftar_absen_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu/pilih_absen_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 
@@ -16,7 +17,7 @@ class AbsenPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<Absen> getAbsen() async {
+    Future<List<Absen>> getAbsen() async {
       return await WisataService().getAbsen(
           idInvoice: res!.transaction!.idInvoice,
           idWisata: res!.transaction!.idTravel,
@@ -59,7 +60,10 @@ class AbsenPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        DaftarAbsenPage(list: value.listAbsenPeserta),
+                        // DaftarAbsenPage(list: value.listAbsenPeserta),
+                        PilihAbsenPage(
+                      listAbsen: value,
+                    ),
                   ),
                 );
               }).catchError((onError) {
