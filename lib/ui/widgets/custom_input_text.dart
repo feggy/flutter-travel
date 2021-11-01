@@ -33,6 +33,7 @@ class CustomInputText extends StatelessWidget {
         ),
         controller: controller,
         decoration: InputDecoration(
+          isDense: true,
           label: Text(
             label,
             style: greyTextStyle.copyWith(

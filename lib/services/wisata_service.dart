@@ -14,6 +14,9 @@ class WisataService {
   final CollectionReference _absenReference =
       FirebaseFirestore.instance.collection('absen');
 
+  final CollectionReference _alasanReference =
+      FirebaseFirestore.instance.collection('alasan');
+
   Future<String> addWisata({required WisataModel data}) async {
     try {
       String response = '';
@@ -235,6 +238,90 @@ class WisataService {
           });
         }
       }
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> updateAgenda({
+    required String id,
+    required String pemandu,
+    required List<HariModel> agenda,
+    required String idInvoice,
+    required String idTravel,
+    required String alasan,
+  }) async {
+    try {
+      String response = '';
+      var result = await _wisataReference
+          .where('id', isEqualTo: id)
+          .where('pemandu', isEqualTo: pemandu)
+          .get();
+
+      List<Map<String, dynamic>> agendaMap = agenda
+          .map((e) => {
+                'dayOfNumber': e.dayOfNumber,
+                'agenda': e.agenda
+                    .map((e) => {
+                          'dayOfNumber': e.dayOfNumber,
+                          'startTime': e.startTime,
+                          'endTime': e.endTime,
+                          'deskripsi': e.deskripsi,
+                        })
+                    .toList(),
+              })
+          .toList();
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _wisataReference
+              .doc(id)
+              .update({'agenda': agendaMap}).then((value) async {
+            response = 'Absen berhasil di simpan';
+
+            await addAlasan(
+              idInvoice: idInvoice,
+              idTravel: idTravel,
+              pemandu: pemandu,
+              alasan: alasan,
+            );
+          }).catchError((onError) {
+            response = 'ERROR $onError';
+          });
+        }
+      }
+
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<String> addAlasan({
+    required String idInvoice,
+    required String idTravel,
+    required String pemandu,
+    required String alasan,
+  }) async {
+    try {
+      String response = '';
+
+      await _alasanReference.add({
+        'idInvoice': idInvoice,
+        'idTravel': idTravel,
+        'pemandu': pemandu,
+        'alasan': alasan,
+        'timeCreated': DateTime.now(),
+      }).then((value) {
+        response = 'Berhasil menambahkan alasan perubahan agenda';
+        log(response);
+      }).catchError((onError) {
+        log('ERROR $onError');
+        response = 'Gagal menambahkan alasan perubahan agenda ERROR $onError';
+      });
 
       return response;
     } catch (e) {

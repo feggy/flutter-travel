@@ -44,7 +44,7 @@ class WisataModel extends Equatable {
 }
 
 class HariModel extends Equatable {
-  final int dayOfNumber;
+  int dayOfNumber;
   List<AgendaModel> agenda;
 
   HariModel({required this.dayOfNumber, required this.agenda});
@@ -66,12 +66,12 @@ class HariModel extends Equatable {
 }
 
 class AgendaModel extends Equatable {
-  final int dayOfNumber;
-  final String startTime;
-  final String endTime;
-  final String deskripsi;
+  int dayOfNumber;
+  String startTime;
+  String endTime;
+  String deskripsi;
 
-  const AgendaModel({
+  AgendaModel({
     required this.dayOfNumber,
     required this.startTime,
     required this.endTime,

@@ -15,6 +15,8 @@ import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/pemandu/absen_page.dart';
+import 'package:travel_wisata/ui/pages/pemandu/daftar_agenda.dart';
+import 'package:travel_wisata/ui/pages/pemandu/ubah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_detail_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/model_2_card.dart';
@@ -362,6 +364,57 @@ class _HalamanKendaliPemanduState extends State<HalamanKendaliPemandu> {
       );
     }
 
+    Widget absenPeserta() {
+      return SingleTextCard(
+          text: 'Absen peserta',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AbsenPage(res: widget.res!),
+              ),
+            );
+          });
+    }
+
+    Widget ubahAgenda() {
+      return SingleTextCard(
+          text: 'Ubah Agenda',
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DaftarAgenda(res: widget.res!),
+              ),
+            );
+          });
+    }
+
+    Widget bagikanLokasi() {
+      return SingleTextCard(
+          text: 'Bagikan lokasi',
+          onPressed: () async {
+            await WisataService()
+                .shareLocation(
+              data: LokasiModel(
+                pemandu: widget.res!.wisata!.pemandu,
+                idWisata: widget.res!.wisata!.id,
+                timeCreated: DateTime.now(),
+                lat: lat,
+                lng: lng,
+              ),
+            )
+                .then((value) {
+              showAlert('Bagikan lokasi', value);
+            }).catchError((onError) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(onError),
+                backgroundColor: redColor,
+              ));
+            });
+          });
+    }
+
     return Scaffold(
       appBar: AppBarItem(title: 'Halaman Kendali'),
       backgroundColor: whiteColor,
@@ -395,42 +448,11 @@ class _HalamanKendaliPemanduState extends State<HalamanKendaliPemandu> {
                             ? buttonMulaiWisata()
                             : Column(
                                 children: [
-                                  SingleTextCard(
-                                      text: 'Absen peserta',
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                AbsenPage(res: widget.res!),
-                                          ),
-                                        );
-                                      }),
+                                  absenPeserta(),
                                   const SizedBox(height: 10),
-                                  SingleTextCard(
-                                      text: 'Bagikan lokasi',
-                                      onPressed: () async {
-                                        await WisataService()
-                                            .shareLocation(
-                                          data: LokasiModel(
-                                            pemandu:
-                                                widget.res!.wisata!.pemandu,
-                                            idWisata: widget.res!.wisata!.id,
-                                            timeCreated: DateTime.now(),
-                                            lat: lat,
-                                            lng: lng,
-                                          ),
-                                        )
-                                            .then((value) {
-                                          showAlert('Bagikan lokasi', value);
-                                        }).catchError((onError) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                            content: Text(onError),
-                                            backgroundColor: redColor,
-                                          ));
-                                        });
-                                      }),
+                                  bagikanLokasi(),
+                                  const SizedBox(height: 10),
+                                  ubahAgenda(),
                                   const SizedBox(height: 10),
                                   buttonSelesai(),
                                 ],

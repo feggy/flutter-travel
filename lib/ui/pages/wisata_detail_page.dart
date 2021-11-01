@@ -6,18 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'isi_data_wisata_page.dart';
 
@@ -294,111 +289,6 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
-    void launchUrl(String latitude, String longitude) async {
-      String googleUrl =
-          'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-      await canLaunch(googleUrl)
-          ? await launch(googleUrl)
-          : Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SizedBox(),
-              ),
-            );
-    }
-
-    void startBarcodeStream() async {
-      FlutterBarcodeScanner.getBarcodeStreamReceiver(
-              '#ff6666', 'Batal', false, ScanMode.BARCODE)!
-          .listen((event) {
-        log(event);
-      });
-    }
-
-    void permissionRequest() async {
-      var req = await Permission.camera.request();
-      if (req.isPermanentlyDenied) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => AlertDialog(
-            title: Text(
-              'Akses Kamera',
-              style: blackTextStyle.copyWith(
-                fontWeight: semiBold,
-              ),
-            ),
-            content: Text(
-              'Butuh akses kamera',
-              style: blackTextStyle.copyWith(
-                fontWeight: medium,
-              ),
-            ),
-            actions: [
-              TextButton(
-                child: Text(
-                  'Tolak',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: semiBold,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text(
-                  'Pengaturan',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: semiBold,
-                  ),
-                ),
-                onPressed: () {
-                  openAppSettings();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      }
-    }
-
-    Widget footerPesertaWisata() {
-      return Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
-          bottom: 30,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CustomButton(
-              title: 'ABSEN',
-              onPressed: () async {
-                var status = await Permission.camera.status;
-                if (status.isDenied) {
-                  permissionRequest();
-                } else {
-                  startBarcodeStream();
-                }
-              },
-              width: (MediaQuery.of(context).size.width / 2.2) - 50,
-            ),
-            CustomButton(
-              title: 'CARI PEMANDU',
-              onPressed: () {
-                launchUrl('0.466052', '101.3560171');
-              },
-              width: (MediaQuery.of(context).size.width / 2.2) - 50,
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -436,7 +326,6 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
             ),
             widget.role == ROLE.user && widget.res == null
                 ? footerPesan()
-                // footerPesertaWisata(),
                 : const SizedBox(),
           ],
         ),
