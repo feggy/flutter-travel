@@ -7,12 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_wisata/cubit/alasan_cubit.dart';
+import 'package:travel_wisata/models/alasan_model.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
+import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'isi_data_wisata_page.dart';
 
@@ -34,6 +38,19 @@ class WisataDetailPage extends StatefulWidget {
 
 class _WisataDetailPageState extends State<WisataDetailPage> {
   var tglBerangkat = 'Pilih tanggal';
+  List<AlasanModel> listAlasan = [];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.res!.transaction!.status == 2) {
+      var res = widget.res!.transaction!;
+      context.read<AlasanCubit>().getAlasan(
+          idInvoice: res.idInvoice,
+          idTravel: res.idTravel,
+          pemandu: res.jobFor);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +306,65 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
+    Widget alasan() {
+      return BlocBuilder<AlasanCubit, AlasanState>(
+        builder: (context, state) {
+          if (state is SuccessGetAlasan) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                      text: 'Catatan: ',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 12,
+                        fontWeight: semiBold,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Ada perubahan Jadwal',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      ]),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Alasan Perubahan',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: semiBold,
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: state.listAlasan
+                      .map(
+                        (e) => Text.rich(
+                          TextSpan(
+                              text: '- ',
+                              style: blackTextStyle.copyWith(
+                                fontSize: 12,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: e.alasan,
+                                ),
+                              ]),
+                        ),
+                      )
+                      .toList(),
+                )
+              ],
+            );
+          }
+          return const SizedBox();
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -316,7 +392,11 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
                           const SizedBox(
                             height: 25,
                           ),
-                          agenda()
+                          agenda(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          alasan(),
                         ],
                       ),
                     )

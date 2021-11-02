@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:travel_wisata/cubit/alasan_cubit.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/cubit/gender_cubit.dart';
 import 'package:travel_wisata/cubit/jemput_cubit.dart';
@@ -62,6 +63,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => TravelCubit()),
         BlocProvider(create: (context) => TransactionCubit()),
         BlocProvider(create: (context) => JemputCubit()),
+        BlocProvider(create: (context) => AlasanCubit()),
       ],
       child: MaterialApp(
         routes: {

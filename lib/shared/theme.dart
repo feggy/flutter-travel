@@ -29,3 +29,23 @@ FontWeight semiBold = FontWeight.w600;
 FontWeight bold = FontWeight.w700;
 FontWeight extraBold = FontWeight.w800;
 FontWeight black = FontWeight.w900;
+
+showLoaderDialog(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    content: Row(
+      children: [
+        const CircularProgressIndicator(),
+        Container(
+            margin: const EdgeInsets.only(left: 7),
+            child: const Text("Loading...")),
+      ],
+    ),
+  );
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}

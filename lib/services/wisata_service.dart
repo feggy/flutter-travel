@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:travel_wisata/models/absen_model.dart';
+import 'package:travel_wisata/models/alasan_model.dart';
 import 'package:travel_wisata/models/lokasi_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 
@@ -324,6 +325,31 @@ class WisataService {
       });
 
       return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<AlasanModel>> getAlasan({
+    required String idInvoice,
+    required String idTravel,
+    required String pemandu,
+  }) async {
+    try {
+      QuerySnapshot result = await _alasanReference
+          .orderBy('timeCreated', descending: true)
+          .where('idInvoice', isEqualTo: idInvoice)
+          .where('idTravel', isEqualTo: idTravel)
+          .where('pemandu', isEqualTo: pemandu)
+          .get();
+
+      List<AlasanModel> data = result.docs
+          .map((e) => AlasanModel.fromMap(e.data() as Map<String, dynamic>))
+          .toList();
+
+      log('_ $data');
+
+      return data;
     } catch (e) {
       rethrow;
     }
