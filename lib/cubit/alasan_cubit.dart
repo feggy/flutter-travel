@@ -8,6 +8,10 @@ part 'alasan_state.dart';
 class AlasanCubit extends Cubit<AlasanState> {
   AlasanCubit() : super(AlasanInitial());
 
+  void reset() {
+    emit(AlasanInitial());
+  }
+
   void getAlasan({
     required String idInvoice,
     required String idTravel,

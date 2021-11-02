@@ -43,13 +43,21 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.res!.transaction!.status == 2) {
-      var res = widget.res!.transaction!;
-      context.read<AlasanCubit>().getAlasan(
-          idInvoice: res.idInvoice,
-          idTravel: res.idTravel,
-          pemandu: res.jobFor);
+    if (widget.res != null) {
+      if (widget.res!.transaction!.status == 2) {
+        var res = widget.res!.transaction!;
+        context.read<AlasanCubit>().getAlasan(
+            idInvoice: res.idInvoice,
+            idTravel: res.idTravel,
+            pemandu: res.jobFor);
+      }
     }
+  }
+
+  @override
+  void dispose() {
+    context.read<AlasanCubit>().reset();
+    super.dispose();
   }
 
   @override
