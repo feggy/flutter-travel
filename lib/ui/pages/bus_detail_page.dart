@@ -412,7 +412,7 @@ class _BusDetailPageState extends State<BusDetailPage> {
               ),
             ),
           ),
-          widget.role == ROLE.user ? footerUser() : footerAdmin(),
+          // widget.role == ROLE.user ? footerUser() : footerAdmin(),
         ],
       ),
     );

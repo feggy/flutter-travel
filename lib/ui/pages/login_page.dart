@@ -89,6 +89,9 @@ class LoginPage extends StatelessWidget {
             } else if (state.user.role == 'PEMANDU') {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/pemandu_home', (route) => false);
+            } else if (state.user.role == 'SUPIR') {
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/supir_home', (route) => false);
             }
           } else if (state is AuthFailed) {
             ScaffoldMessenger.of(context).showSnackBar(

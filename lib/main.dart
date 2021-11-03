@@ -24,7 +24,6 @@ import 'package:travel_wisata/ui/pages/admin/detail_transaction_admin_page.dart'
 import 'package:travel_wisata/ui/pages/konfirmasi_pesanan_page.dart';
 import 'package:travel_wisata/ui/pages/login_page.dart';
 import 'package:travel_wisata/ui/pages/main_page.dart';
-import 'package:travel_wisata/ui/pages/pemandu/halaman_kendali_pemandu.dart';
 import 'package:travel_wisata/ui/pages/pemandu/pemandu_page.dart';
 import 'package:travel_wisata/ui/pages/pemandu/sukses_mulai_wisata.dart';
 import 'package:travel_wisata/ui/pages/pemandu/sukses_selesai_wisata.dart';
@@ -32,6 +31,7 @@ import 'package:travel_wisata/ui/pages/pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/register_page.dart';
 import 'package:travel_wisata/ui/pages/splash_page.dart';
 import 'package:travel_wisata/ui/pages/sukses_pembayaran_page.dart';
+import 'package:travel_wisata/ui/pages/supir/supir_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
@@ -91,6 +91,7 @@ class MyApp extends StatelessWidget {
           '/pemandu_home': (context) => const PemanduPage(),
           '/sukses_wisata': (context) => const SuksesMulaiWisata(),
           '/akhiri_wisata': (context) => const SuksesSelesaiWisata(),
+          '/supir_home': (context) => const SupirPage(),
         },
       ),
     );

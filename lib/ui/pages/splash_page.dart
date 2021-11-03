@@ -36,6 +36,9 @@ class _SplashPageState extends State<SplashPage> {
         } else if (role == 'PEMANDU') {
           Navigator.pushNamedAndRemoveUntil(
               context, '/pemandu_home', (route) => false);
+        } else if (role == 'SUPIR') {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/supir_home', (route) => false);
         }
       } else {
         Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
