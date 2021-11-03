@@ -70,7 +70,13 @@ class TransactionCubit extends Cubit<TransactionState> {
     }
   }
 
-  void updateStatus({required String idInvoice, required int status}) async {
+  void updateStatus({
+    String? idInvoice,
+    required int status,
+    String? category,
+    String? tanggalBerangkat,
+    String? idTravel,
+  }) async {
     try {
       emit(TransactionLoadingAdd());
 

@@ -31,6 +31,8 @@ import 'package:travel_wisata/ui/pages/pembayaran_page.dart';
 import 'package:travel_wisata/ui/pages/register_page.dart';
 import 'package:travel_wisata/ui/pages/splash_page.dart';
 import 'package:travel_wisata/ui/pages/sukses_pembayaran_page.dart';
+import 'package:travel_wisata/ui/pages/supir/sukses_mulai_travel_page.dart';
+import 'package:travel_wisata/ui/pages/supir/sukses_selesai_travel_page.dart';
 import 'package:travel_wisata/ui/pages/supir/supir_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
@@ -92,6 +94,8 @@ class MyApp extends StatelessWidget {
           '/sukses_wisata': (context) => const SuksesMulaiWisata(),
           '/akhiri_wisata': (context) => const SuksesSelesaiWisata(),
           '/supir_home': (context) => const SupirPage(),
+          '/sukses_travel': (context) => const SuksesMulaiTravelPage(),
+          '/akhiri_travel': (context) => const SuksesSelesaTravelPage(),
         },
       ),
     );

@@ -3,12 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/cubit/transaction_cubit.dart';
-import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/supir/halaman_kendali_supir_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
-import 'package:travel_wisata/ui/widgets/model_2_card.dart';
 import 'package:travel_wisata/ui/widgets/not_found_item.dart';
 import 'package:travel_wisata/ui/widgets/single_text_card.dart';
 

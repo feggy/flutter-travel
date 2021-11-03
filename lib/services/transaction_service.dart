@@ -163,11 +163,26 @@ class TransactionService {
     }
   }
 
-  Future<String> updateStatus(
-      {required String idInvoice, required int status}) async {
+  Future<String> updateStatus({
+    String? idInvoice,
+    required int status,
+    String? category,
+    String? tanggalBerangkat,
+    String? idTravel,
+  }) async {
     try {
-      var result = await _ref.where('idInvoice', isEqualTo: idInvoice).get();
       String response = '';
+      QuerySnapshot result;
+
+      if (idInvoice != null) {
+        result = await _ref.where('idInvoice', isEqualTo: idInvoice).get();
+      } else {
+        result = await _ref
+            .where('category', isEqualTo: category)
+            .where('tanggalBerangkat', isEqualTo: tanggalBerangkat)
+            .where('idTravel', isEqualTo: idTravel)
+            .get();
+      }
 
       if (result.docs.isNotEmpty) {
         for (var element in result.docs) {
