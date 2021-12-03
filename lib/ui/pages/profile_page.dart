@@ -29,7 +29,9 @@ class ProfilePage extends StatelessWidget {
             decoration: TextDecoration.underline,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/ubah_profil');
+        },
       );
     }
 
@@ -68,7 +70,7 @@ class ProfilePage extends StatelessWidget {
                           fontWeight: semiBold,
                         ),
                       ),
-                      // ubahProfile(),
+                      ubahProfile(),
                       const SizedBox(
                         height: 40,
                       ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class UserModel extends Equatable {
@@ -12,7 +14,7 @@ class UserModel extends Equatable {
   final String address;
 
   const UserModel({
-    required this.id,
+    this.id = "",
     required this.email,
     required this.name,
     required this.password,
@@ -36,6 +38,75 @@ class UserModel extends Equatable {
       );
 
   @override
-  List<Object?> get props =>
-      [id, email, name, password, role, birth, gender, phone, address];
+  List<Object> get props {
+    return [
+      id,
+      email,
+      name,
+      password,
+      role,
+      birth,
+      gender,
+      phone,
+      address,
+    ];
+  }
+
+  UserModel copyWith({
+    String? id,
+    String? email,
+    String? name,
+    String? password,
+    String? role,
+    String? birth,
+    String? gender,
+    String? phone,
+    String? address,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      password: password ?? this.password,
+      role: role ?? this.role,
+      birth: birth ?? this.birth,
+      gender: gender ?? this.gender,
+      phone: phone ?? this.phone,
+      address: address ?? this.address,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'email': email,
+      'name': name,
+      'password': password,
+      'role': role,
+      'birth': birth,
+      'gender': gender,
+      'phone': phone,
+      'address': address,
+    };
+  }
+
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
+      email: map['email'],
+      name: map['name'],
+      password: map['password'],
+      role: map['role'],
+      birth: map['birth'],
+      gender: map['gender'],
+      phone: map['phone'],
+      address: map['address'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  // factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
+
+  @override
+  bool get stringify => true;
 }

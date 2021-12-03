@@ -67,6 +67,7 @@ class _DaftarPemanduPageState extends State<DaftarPemanduPage> {
                               (e) => SingleTextCard(
                                 text: e.name,
                                 onPressed: () {},
+                                noIcon: true,
                               ),
                             )
                             .toList(),

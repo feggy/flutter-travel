@@ -48,6 +48,59 @@ class UserService {
     }
   }
 
+  Future<UserModel?> getUserByEmail(String email) async {
+    try {
+      UserModel? user;
+
+      await _userReference.where('email', isEqualTo: email).get().then((value) {
+        user = value.docs
+            .map((e) => UserModel.fromMap(e.data() as Map<String, dynamic>))
+            .toList()[0];
+      }).catchError((onError) {
+        log('ERROR $onError');
+      });
+
+      return user;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> editUser({
+    required email,
+    required name,
+    required birth,
+    required gender,
+    required phone,
+    required address,
+  }) async {
+    try {
+      bool status = false;
+      var result = await _userReference.where('email', isEqualTo: email).get();
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _userReference.doc(id).update({
+            'name': name,
+            'birth': birth,
+            'gender': gender,
+            'phone': phone,
+            'address': address,
+          }).then((value) {
+            status = true;
+          }).catchError((onError) {
+            log('_ $onError');
+            status = false;
+          });
+        }
+      }
+      return status;
+    } catch (onError) {
+      rethrow;
+    }
+  }
+
   Future<List<UserModel>> getListUser(String role) async {
     try {
       List<UserModel> listUser = [];

@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/shared/theme.dart';
+import 'package:travel_wisata/ui/pages/daftar_pelanggan_page.dart';
+import 'package:travel_wisata/ui/pages/ubah_profil_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/single_text_card.dart';
 
@@ -35,15 +37,32 @@ class AdminPage extends StatelessWidget {
             },
           ),
           SingleTextCard(
-            text: 'Kelola Pemandu Wisata',
+            text: 'Daftar Pemandu Wisata',
             onPressed: () {
               Navigator.pushNamed(context, '/pemandu');
             },
           ),
           SingleTextCard(
-            text: 'Kelola Supir',
+            text: 'Daftar Pelanggan',
             onPressed: () {
-              Navigator.pushNamed(context, '/supir');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (builder) => const DaftarPelangganPage(),
+                ),
+              );
+            },
+          ),
+          // SingleTextCard(
+          //   text: 'Kelola Supir',
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, '/supir');
+          //   },
+          // ),
+          SingleTextCard(
+            text: 'Ubah Profil',
+            onPressed: () {
+              Navigator.pushNamed(context, '/ubah_profil');
             },
           ),
         ],

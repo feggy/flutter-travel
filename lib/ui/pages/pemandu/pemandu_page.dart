@@ -133,6 +133,16 @@ class _PemanduPageState extends State<PemanduPage> {
                 },
               ),
             ),
+            CustomButton(
+                title: 'UBAH PROFIL',
+                margin: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  bottom: 10,
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/ubah_profil');
+                }),
             BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is AuthInitial) {

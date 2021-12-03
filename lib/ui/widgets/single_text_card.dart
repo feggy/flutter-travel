@@ -5,12 +5,14 @@ class SingleTextCard extends StatelessWidget {
   final String text;
   final Function() onPressed;
   final EdgeInsets margin;
+  final bool noIcon;
 
   const SingleTextCard({
     Key? key,
     required this.text,
     required this.onPressed,
     this.margin = const EdgeInsets.only(bottom: 15),
+    this.noIcon = false,
   }) : super(key: key);
 
   @override
@@ -40,11 +42,13 @@ class SingleTextCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const Image(
-                image: AssetImage('assets/ic_enter.png'),
-                width: 15,
-                height: 15,
-              ),
+              noIcon
+                  ? const SizedBox()
+                  : const Image(
+                      image: AssetImage('assets/ic_enter.png'),
+                      width: 15,
+                      height: 15,
+                    ),
             ],
           ),
         ),

@@ -38,6 +38,7 @@ import 'package:travel_wisata/ui/pages/tambah_agenda_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
 import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
 import 'package:travel_wisata/ui/pages/admin/wisata_admin_page.dart';
+import 'package:travel_wisata/ui/pages/ubah_profil_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_page.dart';
 
 void main() async {
@@ -96,6 +97,7 @@ class MyApp extends StatelessWidget {
           '/supir_home': (context) => const SupirPage(),
           '/sukses_travel': (context) => const SuksesMulaiTravelPage(),
           '/akhiri_travel': (context) => const SuksesSelesaTravelPage(),
+          '/ubah_profil': (context) => const UbahProfilPage(),
         },
       ),
     );
