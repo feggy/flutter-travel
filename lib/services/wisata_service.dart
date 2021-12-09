@@ -57,6 +57,51 @@ class WisataService {
     }
   }
 
+  Future<bool> editWisata({required WisataModel data}) async {
+    try {
+      bool status = false;
+      var result = await _wisataReference.where('id', isEqualTo: data.id).get();
+
+      List<Map<String, dynamic>> agendaMap = data.agenda
+          .map((e) => {
+                'dayOfNumber': e.dayOfNumber,
+                'agenda': e.agenda
+                    .map((e) => {
+                          'dayOfNumber': e.dayOfNumber,
+                          'startTime': e.startTime,
+                          'endTime': e.endTime,
+                          'deskripsi': e.deskripsi,
+                        })
+                    .toList(),
+              })
+          .toList();
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _wisataReference.doc(id).update({
+            'nama': data.nama,
+            'biaya': data.biaya,
+            'deskripsiHari': data.deskripsiHari,
+            'imageUrl': data.imageUrl,
+            'agenda': agendaMap,
+            'pemandu': data.pemandu,
+          }).then((value) {
+            status = true;
+          }).catchError((onError) {
+            log('_ $onError');
+            status = false;
+            log('_ $onError');
+          });
+        }
+      }
+
+      return status;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<WisataModel>> getListWisata() async {
     try {
       QuerySnapshot result = await _wisataReference.get();

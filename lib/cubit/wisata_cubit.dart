@@ -44,6 +44,39 @@ class WisataCubit extends Cubit<WisataState> {
     }
   }
 
+  void editWisata({
+    required String id,
+    required String nama,
+    required String biaya,
+    required String deskripsiHari,
+    required String imageUrl,
+    required List<HariModel> agenda,
+    required String pemandu,
+  }) async {
+    try {
+      emit(WisataLoadingAdd());
+
+      WisataModel wisata = WisataModel(
+        id: id,
+        nama: nama,
+        biaya: biaya,
+        deskripsiHari: deskripsiHari,
+        imageUrl: imageUrl,
+        agenda: agenda,
+        pemandu: pemandu,
+      );
+
+      await WisataService()
+          .editWisata(data: wisata)
+          .then((value) => emit(WisataSuccessEdit(value)))
+          .catchError((onError) {
+        emit(WisataFailedAdd(e.toString()));
+      });
+    } catch (e) {
+      emit(WisataFailedAdd(e.toString()));
+    }
+  }
+
   void getListWisata() async {
     try {
       emit(WisataLoading());

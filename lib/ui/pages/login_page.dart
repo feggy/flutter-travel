@@ -94,10 +94,18 @@ class LoginPage extends StatelessWidget {
                   context, '/supir_home', (route) => false);
             }
           } else if (state is AuthFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: redColor,
-                content: Text('Login Gagal!\nEmail atau password salah!'),
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: const Text('Login Gagal'),
+                content: const Text('Email atau password salah!'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('OK'))
+                ],
               ),
             );
           }

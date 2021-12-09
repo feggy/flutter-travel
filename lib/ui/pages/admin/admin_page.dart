@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/daftar_pelanggan_page.dart';
-import 'package:travel_wisata/ui/pages/ubah_profil_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/single_text_card.dart';
 

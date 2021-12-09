@@ -11,6 +11,7 @@ import 'package:travel_wisata/cubit/wisata_cubit.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/services/user_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
+import 'package:travel_wisata/ui/pages/pemandu/ubah_agenda_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/custom_input_text.dart';
@@ -19,7 +20,9 @@ import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class TambahWisataPage extends StatefulWidget {
-  const TambahWisataPage({Key? key}) : super(key: key);
+  final WisataModel? data;
+
+  const TambahWisataPage({Key? key, this.data}) : super(key: key);
 
   @override
   State<TambahWisataPage> createState() => _TambahWisataPageState();
@@ -42,8 +45,19 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
 
   @override
   void initState() {
-    _picker;
     super.initState();
+    _picker;
+
+    if (widget.data != null) {
+      namaController.text = widget.data!.nama;
+      biayaController.text = widget.data!.biaya;
+      deskripsiHariController.text = widget.data!.deskripsiHari;
+      pemanduController.text = widget.data!.pemandu;
+
+      setState(() {
+        dataList = widget.data!.agenda;
+      });
+    }
   }
 
   @override
@@ -164,6 +178,22 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
               content: Text(state.response),
             ));
             Navigator.pop(context);
+          } else if (state is WisataSuccessEdit) {
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: const Text('Berhasil'),
+                content: const Text('Berhasil mengubah data'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/admin', (route) => false);
+                      },
+                      child: const Text('OK'))
+                ],
+              ),
+            );
           } else if (state is WisataFailedAdd) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: redColor,
@@ -204,7 +234,11 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                   errorMsg =
                       "Kolom deskripsi lama perjalanan tidak boleh kosong";
                 } else if (imageUrl.isEmpty) {
-                  errorMsg = "Upload cover terlebih dahulu";
+                  if (widget.data == null) {
+                    errorMsg = "Upload cover terlebih dahulu";
+                  } else {
+                    imageUrl = widget.data!.imageUrl;
+                  }
                 } else if (dataList.isEmpty) {
                   errorMsg = "Agenda harus diisi";
                 } else if (pemandu.isEmpty) {
@@ -221,14 +255,26 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                     ),
                   );
                 } else {
-                  context.read<WisataCubit>().addWisata(
-                        nama: namaController.text,
-                        biaya: biayaController.text,
-                        deskripsiHari: deskripsiHariController.text,
-                        imageUrl: imageUrl,
-                        agenda: dataList,
-                        pemandu: pemandu,
-                      );
+                  if (widget.data == null) {
+                    context.read<WisataCubit>().addWisata(
+                          nama: namaController.text,
+                          biaya: biayaController.text,
+                          deskripsiHari: deskripsiHariController.text,
+                          imageUrl: imageUrl,
+                          agenda: dataList,
+                          pemandu: pemandu,
+                        );
+                  } else {
+                    context.read<WisataCubit>().editWisata(
+                          id: widget.data!.id,
+                          nama: namaController.text,
+                          biaya: biayaController.text,
+                          deskripsiHari: deskripsiHariController.text,
+                          imageUrl: imageUrl,
+                          agenda: dataList,
+                          pemandu: pemandu,
+                        );
+                  }
                 }
               });
         },
@@ -264,8 +310,105 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
       );
     }
 
+    Widget listWisata() {
+      Widget titleHari(HariModel data) {
+        return Text(
+          'Hari ke ${data.dayOfNumber}',
+          style: blackTextStyle.copyWith(
+            fontSize: 12,
+            fontWeight: medium,
+          ),
+        );
+      }
+
+      Widget listAgenda(HariModel data) {
+        data.agenda = data.agenda
+          ..sort((a, b) => a.startTime.compareTo(b.startTime));
+        return Column(
+          children: data.agenda
+              .map((e) => GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UbahAgendaPage(
+                            dayNumber: data.dayOfNumber,
+                            agenda: e,
+                          ),
+                        ),
+                      ).then((value) {
+                        log('value $value');
+                        if (value != null) {
+                          HariModel set = value;
+
+                          setState(() {
+                            dataList
+                                .firstWhere((element) => element == data)
+                                .agenda
+                                .remove(e);
+
+                            dataList
+                                .firstWhere((element) => element == data)
+                                .agenda
+                                .add(set.agenda[0]);
+                          });
+                        }
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        top: 5,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 90,
+                            child: Text(
+                              '${e.startTime} - ${e.endTime}',
+                              style: blackTextStyle.copyWith(
+                                fontSize: 12,
+                                fontWeight: regular,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              e.deskripsi,
+                              style: blackTextStyle.copyWith(
+                                fontSize: 12,
+                                fontWeight: regular,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ))
+              .toList(),
+        );
+      }
+
+      return Column(
+          children: dataList
+              .map(
+                (e) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    titleHari(e),
+                    listAgenda(e),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+              )
+              .toList());
+    }
+
     return Scaffold(
-      appBar: AppBarItem(title: 'Tambah Wisata'),
+      appBar: AppBarItem(
+          title: widget.data == null ? 'Tambah Wisata' : 'Ubah Wisata'),
       backgroundColor: whiteColor,
       body: Column(
         children: [
@@ -321,12 +464,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                     height: 10,
                   ),
                   if (dataList.isNotEmpty)
-                    Column(
-                        children: dataList
-                            .map(
-                              (e) => HariAgendaItem(data: e),
-                            )
-                            .toList())
+                    listWisata()
                   else
                     Center(
                       child: Text(

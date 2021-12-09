@@ -12,8 +12,8 @@ import 'package:travel_wisata/models/alasan_model.dart';
 import 'package:travel_wisata/models/role_enum.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
-import 'package:travel_wisata/services/wisata_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
+import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -85,31 +85,31 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
               overflow: TextOverflow.ellipsis,
             ),
           ),
-          SizedBox(
-            width: 45,
-            height: 25,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Image.asset(
-                    'assets/ic_star.png',
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '4.0',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: semiBold,
-                  ),
-                ),
-              ],
-            ),
-          )
+          // SizedBox(
+          //   width: 45,
+          //   height: 25,
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Image.asset(
+          //           'assets/ic_star.png',
+          //           width: 20,
+          //           height: 20,
+          //         ),
+          //       ),
+          //       const SizedBox(
+          //         width: 5,
+          //       ),
+          //       Text(
+          //         '4.0',
+          //         style: blackTextStyle.copyWith(
+          //           fontSize: 14,
+          //           fontWeight: semiBold,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // )
         ],
       );
     }
@@ -373,6 +373,27 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
+    Widget footerAdmin() {
+      return CustomButton(
+          title: 'UBAH',
+          margin: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 10,
+            bottom: 30,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TambahWisataPage(
+                  data: widget.data,
+                ),
+              ),
+            );
+          });
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -415,6 +436,7 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
             widget.role == ROLE.user && widget.res == null
                 ? footerPesan()
                 : const SizedBox(),
+            widget.role == ROLE.admin ? footerAdmin() : const SizedBox(),
           ],
         ),
       ),

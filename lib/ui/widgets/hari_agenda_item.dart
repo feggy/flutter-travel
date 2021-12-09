@@ -23,6 +23,8 @@ class HariAgendaItem extends StatelessWidget {
     }
 
     Widget listAgenda() {
+      data.agenda = data.agenda
+        ..sort((a, b) => a.startTime.compareTo(b.startTime));
       return Column(
         children: data.agenda
             .map((e) => Padding(

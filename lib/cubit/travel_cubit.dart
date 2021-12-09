@@ -41,6 +41,35 @@ class TravelCubit extends Cubit<TravelState> {
     });
   }
 
+  void editTravel({
+    required String id,
+    required String nama,
+    required String biaya,
+    required String kelas,
+    required String spesifikasi,
+    required String fasilitas,
+    required String imageUrl,
+  }) async {
+    emit(TravelLoading());
+
+    TravelModel data = TravelModel(
+      id: id,
+      nama: nama,
+      biaya: biaya,
+      kelas: kelas,
+      spesifikasi: spesifikasi,
+      fasilitas: fasilitas,
+      imageUrl: imageUrl,
+      supir: '',
+    );
+
+    await TravelService().editTravel(data: data).then((value) {
+      emit(TravelSuccessEdit(value));
+    }).catchError((onError) {
+      emit(TravelError(onError));
+    });
+  }
+
   void getListTravel() async {
     try {
       emit(TravelLoading());

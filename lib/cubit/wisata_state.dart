@@ -48,3 +48,12 @@ class WisataFailedAdd extends WisataState {
   @override
   List<Object> get props => [error];
 }
+
+class WisataSuccessEdit extends WisataState {
+  final bool status;
+
+  const WisataSuccessEdit(this.status);
+
+  @override
+  List<Object> get props => [status];
+}

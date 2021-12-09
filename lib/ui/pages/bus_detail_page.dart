@@ -10,6 +10,7 @@ import 'package:travel_wisata/models/travel_model.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/isi_data_wisata_page.dart';
 import 'package:travel_wisata/ui/pages/search_address_page.dart';
+import 'package:travel_wisata/ui/pages/tambah_bus_page.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 
@@ -302,7 +303,16 @@ class _BusDetailPageState extends State<BusDetailPage> {
             top: 10,
             bottom: 30,
           ),
-          onPressed: () {});
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TambahBusPage(
+                  data: widget.data,
+                ),
+              ),
+            );
+          });
     }
 
     Widget buttonJemput() {
@@ -406,13 +416,14 @@ class _BusDetailPageState extends State<BusDetailPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    widget.res != null ? jemput() : const SizedBox(),
+                    // widget.res != null ? jemput() : const SizedBox(),
                   ],
                 ),
               ),
             ),
           ),
           widget.role == ROLE.user ? footerUser() : const SizedBox(),
+          widget.role == ROLE.admin ? footerAdmin() : const SizedBox(),
         ],
       ),
     );

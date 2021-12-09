@@ -29,6 +29,15 @@ class TravelSuccessAdd extends TravelState {
   List<Object> get props => [response];
 }
 
+class TravelSuccessEdit extends TravelState {
+  final bool status;
+
+  const TravelSuccessEdit(this.status);
+
+  @override
+  List<Object> get props => [status];
+}
+
 class TravelError extends TravelState {
   final String error;
 

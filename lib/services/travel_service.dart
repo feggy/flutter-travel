@@ -35,6 +35,35 @@ class TravelService {
     }
   }
 
+  Future<bool> editTravel({required TravelModel data}) async {
+    try {
+      bool status = false;
+      var result = await _ref.where('id', isEqualTo: data.id).get();
+
+      if (result.docs.isNotEmpty) {
+        for (var element in result.docs) {
+          var id = element.id;
+          await _ref.doc(id).update({
+            'nama': data.nama,
+            'biaya': data.biaya,
+            'kelas': data.kelas,
+            'spesifikasi': data.spesifikasi,
+            'fasilitas': data.fasilitas,
+            'imageUrl': data.imageUrl,
+          }).then((value) {
+            status = true;
+          }).catchError((onError) {
+            status = false;
+            log('_ $onError');
+          });
+        }
+      }
+      return status;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<String> addJemput({required JemputPenumpang data}) async {
     try {
       String response = '';

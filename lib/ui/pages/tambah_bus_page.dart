@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:travel_wisata/cubit/travel_cubit.dart';
+import 'package:travel_wisata/models/travel_model.dart';
+import 'package:travel_wisata/services/travel_service.dart';
 import 'package:travel_wisata/services/user_service.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
@@ -18,7 +20,9 @@ import 'package:path/path.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TambahBusPage extends StatefulWidget {
-  const TambahBusPage({Key? key}) : super(key: key);
+  final TravelModel? data;
+
+  const TambahBusPage({Key? key, this.data}) : super(key: key);
 
   @override
   State<TambahBusPage> createState() => _TambahBusPageState();
@@ -40,6 +44,18 @@ class _TambahBusPageState extends State<TambahBusPage> {
   final _picker = ImagePicker();
   String imageUrl = '';
   var bytes;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.data != null) {
+      namaController.text = widget.data!.nama;
+      biayaController.text = widget.data!.biaya;
+      classController.text = widget.data!.kelas;
+      spesifikasiController.text = widget.data!.spesifikasi;
+      fasilitasController.text = widget.data!.fasilitas;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +126,30 @@ class _TambahBusPageState extends State<TambahBusPage> {
       return BlocConsumer<TravelCubit, TravelState>(
         listener: (context, state) {
           if (state is TravelSuccessAdd) {
+            String response = state.response;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 backgroundColor: greenColor,
-                content: Text(state.response),
+                content: Text(response),
               ),
             );
             Navigator.pop(context);
+          } else if (state is TravelSuccessEdit) {
+            showDialog(
+              context: context,
+              builder: (_) => AlertDialog(
+                title: const Text('Berhasil'),
+                content: const Text('Berhasil mengubah data'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/admin', (route) => false);
+                      },
+                      child: const Text('OK'))
+                ],
+              ),
+            );
           } else if (state is TravelError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -149,8 +182,8 @@ class _TambahBusPageState extends State<TambahBusPage> {
               var spesifikasi = spesifikasiController.text;
               var fasilitas = fasilitasController.text;
               var supir = supirController.text;
-              var supirCheck = await UserService()
-                  .checkUserAvailable(supirController.text, 'SUPIR');
+              // var supirCheck = await UserService()
+              //     .checkUserAvailable(supirController.text, 'SUPIR');
 
               if (nama.isEmpty) {
                 errorMsg = "Kolom nama tidak boleh kosong";
@@ -163,12 +196,18 @@ class _TambahBusPageState extends State<TambahBusPage> {
               } else if (fasilitas.isEmpty) {
                 errorMsg = "Kolom fasilitas tidak boleh kosong";
               } else if (imageUrl.isEmpty) {
-                errorMsg = "foto belum dipilih";
-              } else if (supir.isEmpty) {
-                errorMsg = "Kolom email supir tidak boleh kosong";
-              } else if (supirCheck == false) {
-                errorMsg = "Data supir tidak ditemukan";
+                if (widget.data == null) {
+                  errorMsg = "foto belum dipilih";
+                } else {
+                  imageUrl = widget.data!.imageUrl;
+                }
               }
+              // else if (supir.isEmpty) {
+              //   errorMsg = "Kolom email supir tidak boleh kosong";
+              // }
+              // else if (supirCheck == false) {
+              //   errorMsg = "Data supir tidak ditemukan";
+              // }
 
               if (errorMsg.isNotEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -178,15 +217,27 @@ class _TambahBusPageState extends State<TambahBusPage> {
                   ),
                 );
               } else {
-                context.read<TravelCubit>().addTravel(
-                      nama: nama,
-                      biaya: biaya,
-                      kelas: kelas,
-                      spesifikasi: spesifikasi,
-                      fasilitas: fasilitas,
-                      imageUrl: imageUrl,
-                      supir: supir,
-                    );
+                if (widget.data == null) {
+                  context.read<TravelCubit>().addTravel(
+                        nama: nama,
+                        biaya: biaya,
+                        kelas: kelas,
+                        spesifikasi: spesifikasi,
+                        fasilitas: fasilitas,
+                        imageUrl: imageUrl,
+                        supir: supir,
+                      );
+                } else {
+                  context.read<TravelCubit>().editTravel(
+                        id: widget.data!.id,
+                        nama: nama,
+                        biaya: biaya,
+                        kelas: kelas,
+                        spesifikasi: spesifikasi,
+                        fasilitas: fasilitas,
+                        imageUrl: imageUrl,
+                      );
+                }
               }
             },
             margin: const EdgeInsets.only(
@@ -230,7 +281,9 @@ class _TambahBusPageState extends State<TambahBusPage> {
     }
 
     return Scaffold(
-      appBar: AppBarItem(title: 'Tambah Travel'),
+      appBar: AppBarItem(
+        title: widget.data == null ? 'Tambah Travel' : 'Ubah Travel',
+      ),
       backgroundColor: whiteColor,
       body: Column(
         children: [
@@ -277,10 +330,10 @@ class _TambahBusPageState extends State<TambahBusPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    inputSupir(),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    // inputSupir(),
+                    // const SizedBox(
+                    //   height: 20,
+                    // ),
                     uploadCover(),
                   ],
                 ),

@@ -204,6 +204,29 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    Widget footer() {
+      return Column(
+        children: [
+          Text(
+            'Maiga Tour & Travel',
+            style: blackTextStyle.copyWith(
+              fontSize: 14,
+              fontWeight: semiBold,
+            ),
+          ),
+          Text(
+            'Jl. Inpres, Samping Gg. Sejahtera Pekanbaru, Riau',
+            style: greyTextStyle.copyWith(fontSize: 12),
+          ),
+          Text(
+            '0761-7436-266 | 0852-6535-9555 | 0852-6429-6524',
+            style: greyTextStyle.copyWith(fontSize: 12),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: ListView(
@@ -212,6 +235,13 @@ class _HomePageState extends State<HomePage> {
           menu(),
           rekomendasiWisata(),
           rekomendasiTiketBus(),
+          SizedBox(
+            height: 20,
+          ),
+          footer(),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
