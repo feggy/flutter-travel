@@ -182,10 +182,10 @@ class _BusDetailPageState extends State<BusDetailPage> {
           showDatePicker(
             context: context,
             initialDate: DateTime.now(),
-            firstDate: DateTime(2021),
-            lastDate: DateTime(2022),
+            firstDate: DateTime(2022),
+            lastDate: DateTime(2030),
             initialEntryMode: DatePickerEntryMode.calendarOnly,
-            selectableDayPredicate: _decideWhichDayToEnable,
+            // selectableDayPredicate: _decideWhichDayToEnable,
           ).then((value) {
             setState(() {
               tglBerangkat = formatter.format(value!);

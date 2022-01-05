@@ -67,57 +67,55 @@ class _PemanduPageState extends State<PemanduPage> {
                             ),
                           ),
                         ),
-                        SingleChildScrollView(
-                          child: Padding(
+                        Expanded(
+                          child: ListView(
                             padding: const EdgeInsets.only(
                               left: 20,
                               right: 20,
                               top: 40,
                             ),
-                            child: Column(
-                              children: state.list.map((e) {
-                                var nama = '';
-                                var harga =
-                                    'Tanggal berangkat ${e.transaction!.tanggalBerangkat}';
-                                var imageUrl = '';
-                                var status = e.transaction!.status;
+                            children: state.list.map((e) {
+                              var nama = '';
+                              var harga =
+                                  'Tanggal berangkat ${e.transaction!.tanggalBerangkat}';
+                              var imageUrl = '';
+                              var status = e.transaction!.status;
 
-                                if (e.transaction!.category == 'TRAVEL') {
-                                  nama = e.travel!.nama;
-                                  imageUrl = e.travel!.imageUrl;
-                                } else {
-                                  nama = e.wisata!.nama;
-                                  imageUrl = e.wisata!.imageUrl;
-                                }
+                              if (e.transaction!.category == 'TRAVEL') {
+                                nama = e.travel!.nama;
+                                imageUrl = e.travel!.imageUrl;
+                              } else {
+                                nama = e.wisata!.nama;
+                                imageUrl = e.wisata!.imageUrl;
+                              }
 
-                                return InkWell(
-                                  onTap: () async {
-                                    if (e.transaction!.category == 'WISATA') {
-                                      await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HalamanKendaliPemandu(
-                                                  data: e.wisata!,
-                                                  role: ROLE.pemandu,
-                                                  res: e,
-                                                ),
-                                              ))
-                                          .then((value) => context
-                                              .read<TransactionCubit>()
-                                              .getListJob(email: email));
-                                    }
-                                  },
-                                  child: Model2Card(
-                                    nama: nama,
-                                    harga: harga,
-                                    deskripsi: '',
-                                    imageUrl: imageUrl,
-                                    status: status,
-                                  ),
-                                );
-                              }).toList(),
-                            ),
+                              return InkWell(
+                                onTap: () async {
+                                  if (e.transaction!.category == 'WISATA') {
+                                    await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HalamanKendaliPemandu(
+                                                data: e.wisata!,
+                                                role: ROLE.pemandu,
+                                                res: e,
+                                              ),
+                                            ))
+                                        .then((value) => context
+                                            .read<TransactionCubit>()
+                                            .getListJob(email: email));
+                                  }
+                                },
+                                child: Model2Card(
+                                  nama: nama,
+                                  harga: harga,
+                                  deskripsi: '',
+                                  imageUrl: imageUrl,
+                                  status: status,
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
                       ],
