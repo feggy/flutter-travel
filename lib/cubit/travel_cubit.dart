@@ -12,7 +12,7 @@ class TravelCubit extends Cubit<TravelState> {
 
   void addTravel({
     required String nama,
-    required String biaya,
+    required int biaya,
     required String kelas,
     required String spesifikasi,
     required String fasilitas,
@@ -44,7 +44,7 @@ class TravelCubit extends Cubit<TravelState> {
   void editTravel({
     required String id,
     required String nama,
-    required String biaya,
+    required int biaya,
     required String kelas,
     required String spesifikasi,
     required String fasilitas,

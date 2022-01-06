@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                                   },
                                   child: Model2Card(
                                     nama: e.nama,
-                                    harga: e.biaya,
+                                    harga: e.biaya.toString(),
                                     deskripsi: e.kelas,
                                     imageUrl: e.imageUrl,
                                   ),

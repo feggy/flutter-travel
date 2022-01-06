@@ -53,17 +53,11 @@ class _BusDetailPageState extends State<BusDetailPage> {
       return double.tryParse(s) != null;
     }
 
-    String newSubtitle = "";
-    if (isNumeric(widget.data.biaya)) {
-      int number = int.parse(widget.data.biaya);
-      newSubtitle = NumberFormat.currency(
-        locale: 'id',
-        symbol: 'Rp',
-        decimalDigits: 0,
-      ).format(number);
-    } else {
-      newSubtitle = widget.data.biaya;
-    }
+    String newSubtitle = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    ).format(widget.data.biaya);
 
     ImageProvider loadImage() {
       if (widget.data.imageUrl.isNotEmpty) {

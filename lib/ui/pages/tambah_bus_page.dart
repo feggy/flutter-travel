@@ -50,7 +50,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
     super.initState();
     if (widget.data != null) {
       namaController.text = widget.data!.nama;
-      biayaController.text = widget.data!.biaya;
+      biayaController.text = widget.data!.biaya.toString();
       classController.text = widget.data!.kelas;
       spesifikasiController.text = widget.data!.spesifikasi;
       fasilitasController.text = widget.data!.fasilitas;
@@ -220,7 +220,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
                 if (widget.data == null) {
                   context.read<TravelCubit>().addTravel(
                         nama: nama,
-                        biaya: biaya,
+                        biaya: int.parse(biaya),
                         kelas: kelas,
                         spesifikasi: spesifikasi,
                         fasilitas: fasilitas,
@@ -231,7 +231,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
                   context.read<TravelCubit>().editTravel(
                         id: widget.data!.id,
                         nama: nama,
-                        biaya: biaya,
+                        biaya: int.parse(biaya),
                         kelas: kelas,
                         spesifikasi: spesifikasi,
                         fasilitas: fasilitas,

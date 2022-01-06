@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class TravelModel extends Equatable {
   final String id;
   final String nama;
-  final String biaya;
+  final int biaya;
   final String kelas;
   final String spesifikasi;
   final String fasilitas;

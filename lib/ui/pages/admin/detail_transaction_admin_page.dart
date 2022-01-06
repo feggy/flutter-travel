@@ -295,9 +295,8 @@ class _DetailTransactionAdminPageState
             if (res!.travel != null) {
               var travel = res!.travel;
               title = travel!.nama;
-              var biayaInt = int.parse(travel.biaya);
-              biaya = toIdr(biayaInt);
-              total = toIdr(biayaInt * jumlah);
+              biaya = toIdr(travel.biaya);
+              total = toIdr(travel.biaya * jumlah);
             }
           } else if (state is TransactionFailedGet) {
             return NotFoundItem(text: 'Terjadi suatu kesalahan');
