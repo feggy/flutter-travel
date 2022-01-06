@@ -165,9 +165,211 @@ class _DetailTransactionAdminPageState
             final pdf = pw.Document();
 
             pdf.addPage(pw.Page(build: (pw.Context context) {
-              return pw.Center(
-                child: pw.Image(pw.MemoryImage(image!), fit: pw.BoxFit.contain),
-              );
+              var widthh = 150.0;
+              return pw.Column(children: [
+                pw.Center(
+                  child: pw.Column(
+                      mainAxisAlignment: pw.MainAxisAlignment.center,
+                      children: [
+                        pw.Text(
+                          'Maiga Tour & Travel',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                        pw.Text(
+                          'Jl. Inpres, Samping Gg. Sejahtera Pekanbaru, Riau',
+                        ),
+                        pw.Text(
+                          '0761-7436-266 | 0852-6535-9555 | 0852-6429-6524',
+                          textAlign: pw.TextAlign.center,
+                        ),
+                        pw.SizedBox(height: 50),
+                        pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: [
+                            pw.Text(
+                              'Detail Pelanggan',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ),
+                            pw.SizedBox(
+                              height: 10,
+                            ),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Nama:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  nama,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Nomor hp:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  phone,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Email:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  email,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(
+                              height: 20,
+                            ),
+                            pw.Text(
+                              'Detail Pemesanan',
+                              style:
+                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                            ),
+                            pw.SizedBox(
+                              height: 10,
+                            ),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Id tagihan:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  idInvoice,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Nama:',
+                                    )),
+                                pw.Text(
+                                  title,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Kategori:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  kategori,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Jumlah pelanggan:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  '$jumlah Orang',
+                                  textAlign: pw.TextAlign.right,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Tanggal keberangkatan:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  tglKeberangkatan,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(
+                              height: 20,
+                            ),
+                            pw.Text('Detail Pembayaran',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold)),
+                            pw.SizedBox(
+                              height: 10,
+                            ),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Waktu pembayaran:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  tglTransaksi,
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Biaya:',
+                                  ),
+                                ),
+                                pw.Text(
+                                  '$biaya/orang',
+                                ),
+                              ],
+                            ),
+                            pw.SizedBox(height: 5),
+                            pw.Row(
+                              children: [
+                                pw.SizedBox(
+                                  width: widthh,
+                                  child: pw.Text(
+                                    'Total Pembayaran:',
+                                  ),
+                                ),
+                                pw.Text(total,
+                                    style: pw.TextStyle(
+                                        fontWeight: pw.FontWeight.bold)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ]),
+                ),
+              ]);
             }));
 
             if (res!.transaction!.category == 'WISATA') {
@@ -175,19 +377,7 @@ class _DetailTransactionAdminPageState
                 return pw.Column(
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
-                      pw.Text('Pemandu : ${res!.wisata!.pemandu}'),
-                      pw.SizedBox(height: 20),
-                      pw.Text('Daftar Peserta',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.SizedBox(height: 5),
-                      pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: res!.transaction!.listTraveler
-                              .map((e) => pw.Text(
-                                  '- ${e.nama}(${e.umur}th) ${e.jenisKelamin}'))
-                              .toList()),
-                      pw.SizedBox(height: 20),
-                      pw.Text('Agenda',
+                      pw.Text('Agenda Perjalanan',
                           style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                       pw.SizedBox(height: 5),
                       pw.Column(
@@ -225,7 +415,20 @@ class _DetailTransactionAdminPageState
                                         ),
                                         pw.SizedBox(height: 10),
                                       ]))
-                              .toList())
+                              .toList()),
+                      pw.SizedBox(height: 10),
+                      pw.Text('Pemandu : ${res!.wisata!.pemandu}'),
+                      pw.SizedBox(height: 20),
+                      pw.Text('Daftar Peserta',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                      pw.SizedBox(height: 5),
+                      pw.Column(
+                          crossAxisAlignment: pw.CrossAxisAlignment.start,
+                          children: res!.transaction!.listTraveler
+                              .map((e) => pw.Text(
+                                  '- ${e.nama}(${e.umur}th) ${e.jenisKelamin}'))
+                              .toList()),
+                      pw.SizedBox(height: 20),
                     ]);
               }));
             }
@@ -292,11 +495,20 @@ class _DetailTransactionAdminPageState
               ).format(s);
             }
 
-            if (res!.travel != null) {
-              var travel = res!.travel;
-              title = travel!.nama;
-              biaya = toIdr(travel.biaya);
-              total = toIdr(travel.biaya * jumlah);
+            if (res!.transaction!.category == 'WISATA') {
+              if (res!.wisata != null) {
+                var wisata = res!.wisata;
+                title = wisata!.nama;
+                biaya = toIdr(wisata.biaya);
+                total = toIdr(wisata.biaya * jumlah);
+              }
+            } else {
+              if (res!.travel != null) {
+                var travel = res!.travel;
+                title = travel!.nama;
+                biaya = toIdr(travel.biaya);
+                total = toIdr(travel.biaya * jumlah);
+              }
             }
           } else if (state is TransactionFailedGet) {
             return NotFoundItem(text: 'Terjadi suatu kesalahan');
@@ -305,119 +517,114 @@ class _DetailTransactionAdminPageState
               child: CircularProgressIndicator(),
             );
           }
-          return Screenshot(
-            controller: screenshotController,
-            child: Container(
-              color: whiteColor,
-              child: Column(
-                children: [
-                  Expanded(
-                      child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        top: 40,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Detail Pelanggan',
-                            style: blackTextStyle.copyWith(
-                              fontSize: 12,
-                              fontWeight: semiBold,
-                            ),
+          return Container(
+            color: whiteColor,
+            child: Column(
+              children: [
+                Expanded(
+                    child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 20,
+                      right: 20,
+                      top: 40,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Detail Pelanggan',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: semiBold,
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        itemRow('Nama', nama),
+                        itemRow('Nomor hp', phone),
+                        itemRow('Email', email),
+                        Container(
+                          width: double.infinity,
+                          height: 1,
+                          color: greyColor,
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 15,
                           ),
-                          itemRow('Nama', nama),
-                          itemRow('Nomor hp', phone),
-                          itemRow('Email', email),
-                          Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: greyColor,
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 15,
-                            ),
+                        ),
+                        Text(
+                          'Detail Pemesanan',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: semiBold,
                           ),
-                          Text(
-                            'Detail Pemesanan',
-                            style: blackTextStyle.copyWith(
-                              fontSize: 12,
-                              fontWeight: semiBold,
-                            ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        itemRow('Id tagihan', idInvoice),
+                        itemRow('Nama', title),
+                        itemRow('Kategori', kategori),
+                        itemRow('Jumlah kursi', '$jumlah Orang'),
+                        itemRow('Tanggal keberangkatan', tglKeberangkatan),
+                        // itemRow('Status', deskripsiStatus),
+                        Container(
+                          width: double.infinity,
+                          height: 1,
+                          color: greyColor,
+                          margin: const EdgeInsets.symmetric(
+                            vertical: 15,
                           ),
-                          const SizedBox(
-                            height: 10,
+                        ),
+                        Text(
+                          'Detail Pembayaran',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: semiBold,
                           ),
-                          itemRow('Id tagihan', idInvoice),
-                          itemRow('Nama', title),
-                          itemRow('Kategori', kategori),
-                          itemRow('Jumlah kursi', '$jumlah Orang'),
-                          itemRow('Tanggal keberangkatan', tglKeberangkatan),
-                          itemRow('Status', deskripsiStatus),
-                          Container(
-                            width: double.infinity,
-                            height: 1,
-                            color: greyColor,
-                            margin: const EdgeInsets.symmetric(
-                              vertical: 15,
-                            ),
-                          ),
-                          Text(
-                            'Detail Pembayaran',
-                            style: blackTextStyle.copyWith(
-                              fontSize: 12,
-                              fontWeight: semiBold,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          itemRow('Waktu pembayaran', tglTransaksi),
-                          itemRow('Biaya', biaya),
-                          itemRow('Total Pembayaran', total),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailPhotoPage(imageUrl: imageUrl),
-                                ),
-                              );
-                            },
-                            child: SizedBox(
-                              width: 150,
-                              height: 150,
-                              child: DottedBorder(
-                                child: Center(
-                                  child: Hero(
-                                    tag: 'transfer',
-                                    child: Image.network(imageUrl),
-                                  ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        itemRow('Waktu pembayaran', tglTransaksi),
+                        itemRow('Biaya', biaya),
+                        itemRow('Total Pembayaran', total),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPhotoPage(imageUrl: imageUrl),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: 150,
+                            height: 150,
+                            child: DottedBorder(
+                              child: Center(
+                                child: Hero(
+                                  tag: 'transfer',
+                                  child: Image.network(imageUrl),
                                 ),
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                      ],
                     ),
-                  )),
-                  status == 0 && role != ROLE.user
-                      ? button()
-                      : const SizedBox(),
-                ],
-              ),
+                  ),
+                )),
+                status == 0 && role != ROLE.user ? button() : const SizedBox(),
+              ],
             ),
           );
         },
