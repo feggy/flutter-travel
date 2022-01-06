@@ -1,13 +1,5 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
@@ -24,14 +16,14 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget header() {
+    Widget header(String text) {
       return Container(
         margin: const EdgeInsets.only(
           top: 40,
           bottom: 80,
         ),
         child: Text(
-          'Login',
+          text,
           style: blackTextStyle.copyWith(
             fontSize: 34,
             fontWeight: semiBold,
@@ -112,7 +104,7 @@ class LoginPage extends StatelessWidget {
         },
         builder: (context, state) {
           if (state is AuthLoading) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -163,33 +155,67 @@ class LoginPage extends StatelessWidget {
       );
     }
 
+    Widget contentMobile() {
+      return Container(
+        margin: const EdgeInsets.symmetric(
+          horizontal: 20,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            header('Login'),
+            inputUsername(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputPassword(),
+            const SizedBox(
+              height: 30,
+            ),
+            buttonLogin(),
+            const SizedBox(
+              height: 65,
+            ),
+            register(),
+          ],
+        ),
+      );
+    }
+
+    Widget contentWeb() {
+      return Center(
+        child: Container(
+          width: 350,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 20,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              header('MAVICK'),
+              const SizedBox(height: 50),
+              inputUsername(),
+              const SizedBox(
+                height: 20,
+              ),
+              inputPassword(),
+              const SizedBox(
+                height: 30,
+              ),
+              buttonLogin(),
+              const SizedBox(height: 30),
+              register(),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header(),
-                inputUsername(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputPassword(),
-                const SizedBox(
-                  height: 30,
-                ),
-                buttonLogin(),
-                SizedBox(
-                  height: 65,
-                ),
-                register(),
-              ],
-            ),
-          ),
+          child: kIsWeb ? contentWeb() : contentMobile(),
         ),
       ),
     );

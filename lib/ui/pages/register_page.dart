@@ -1,10 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_wisata/cubit/gender_cubit.dart';
@@ -268,65 +266,61 @@ class RegisterPage extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-              bottom: 40,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(
-                    top: 40,
-                    bottom: 50,
-                  ),
-                  child: Text(
-                    'Register',
-                    style: blackTextStyle.copyWith(
-                      fontWeight: semiBold,
-                      fontSize: 34,
-                    ),
-                  ),
-                ),
-                inputNama(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputTanggalLahir(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputGender(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputPhone(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputAlamat(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputEmail(),
-                const SizedBox(
-                  height: 20,
-                ),
-                inputPassword(),
-                const SizedBox(
-                  height: 40,
-                ),
-                buttonRegister(),
-                const SizedBox(
-                  height: 30,
-                ),
-                login(),
-              ],
-            ),
+        child: ListView(
+          padding: EdgeInsets.only(
+            left: kIsWeb ? MediaQuery.of(context).size.width / 3 : 20,
+            right: kIsWeb ? MediaQuery.of(context).size.width / 3 : 20,
+            bottom: 40,
           ),
+          children: [
+            Container(
+              margin: const EdgeInsets.only(
+                top: 40,
+                bottom: 50,
+              ),
+              child: Text(
+                'Register',
+                style: blackTextStyle.copyWith(
+                  fontWeight: semiBold,
+                  fontSize: 34,
+                ),
+                textAlign: kIsWeb ? TextAlign.center : null,
+              ),
+            ),
+            inputNama(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputTanggalLahir(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputGender(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputPhone(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputAlamat(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputEmail(),
+            const SizedBox(
+              height: 20,
+            ),
+            inputPassword(),
+            const SizedBox(
+              height: 40,
+            ),
+            buttonRegister(),
+            const SizedBox(
+              height: 30,
+            ),
+            login(),
+          ],
         ),
       ),
     );

@@ -40,6 +40,7 @@ import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
 import 'package:travel_wisata/ui/pages/admin/wisata_admin_page.dart';
 import 'package:travel_wisata/ui/pages/ubah_profil_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AlasanCubit()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const SplashPage(),
           '/main': (context) => const MainPage(),
