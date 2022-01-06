@@ -113,8 +113,8 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
               ? widget.dataWisata!.nama
               : widget.dataTravel!.nama,
           price: widget.dataWisata != null
-              ? widget.dataWisata!.biaya
-              : widget.dataTravel!.biaya,
+              ? widget.dataWisata!.biaya.toString()
+              : widget.dataTravel!.biaya.toString(),
           desc: widget.dataWisata != null
               ? widget.dataWisata!.deskripsiHari
               : widget.dataTravel!.kelas,

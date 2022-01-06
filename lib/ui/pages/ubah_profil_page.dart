@@ -42,7 +42,7 @@ class _UbahProfilPageState extends State<UbahProfilPage> {
           user = value;
 
           namaController.text = user.name;
-          birthController2.text = user.birth;
+          birthController2.text = DateFormat('dd MMM yyyy').format(user.birth);
           phoneController.text = user.phone;
           alamatController.text = user.address;
 
@@ -275,7 +275,7 @@ class _UbahProfilPageState extends State<UbahProfilPage> {
                   .editUser(
                 email: email,
                 name: namaController.text,
-                birth: birthController2.text,
+                birth: DateFormat("dd MMMM yyyy").parse(birthController2.text),
                 gender: gender,
                 phone: phoneController.text,
                 address: alamatController.text,

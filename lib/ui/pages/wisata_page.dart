@@ -49,7 +49,7 @@ class _WisataPageState extends State<WisataPage> {
                           },
                           child: Model2Card(
                             nama: e.nama,
-                            harga: e.biaya,
+                            harga: e.biaya.toString(),
                             deskripsi: e.deskripsiHari,
                             imageUrl: e.imageUrl,
                           ),

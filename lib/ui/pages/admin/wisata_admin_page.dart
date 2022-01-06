@@ -74,7 +74,7 @@ class _WisataAdminPageState extends State<WisataAdminPage> {
                               },
                               child: Model2Card(
                                 nama: e.nama,
-                                harga: e.biaya,
+                                harga: e.biaya.toString(),
                                 deskripsi: e.deskripsiHari,
                                 imageUrl: e.imageUrl,
                               ),

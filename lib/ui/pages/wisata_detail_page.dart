@@ -114,21 +114,12 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       );
     }
 
-    bool isNumeric(String s) {
-      return double.tryParse(s) != null;
-    }
-
     String newSubtitle = "";
-    if (isNumeric(widget.data.biaya)) {
-      int number = int.parse(widget.data.biaya);
-      newSubtitle = NumberFormat.currency(
-        locale: 'id',
-        symbol: 'Rp',
-        decimalDigits: 0,
-      ).format(number);
-    } else {
-      newSubtitle = widget.data.biaya;
-    }
+    newSubtitle = NumberFormat.currency(
+      locale: 'id',
+      symbol: 'Rp',
+      decimalDigits: 0,
+    ).format(widget.data.biaya);
 
     Widget deskripsiPrice() {
       return Row(

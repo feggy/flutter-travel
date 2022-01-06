@@ -32,7 +32,7 @@ class KonfirmasiPesananPage extends StatelessWidget {
 
     if (dataWisata != null) {
       title = dataWisata.nama;
-      price = dataWisata.biaya;
+      price = dataWisata.biaya.toString();
       desc = dataWisata.deskripsiHari;
     } else {
       title = dataTravel!.nama;

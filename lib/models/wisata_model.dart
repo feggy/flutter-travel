@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 class WisataModel extends Equatable {
   final String id;
   final String nama;
-  final String biaya;
+  final int biaya;
   final String deskripsiHari;
   final String imageUrl;
   List<HariModel> agenda;

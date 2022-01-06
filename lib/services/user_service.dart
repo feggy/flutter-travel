@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_wisata/models/user_model.dart';
 
 class UserService {
@@ -32,18 +33,27 @@ class UserService {
   Future<UserModel> getUserById(String id) async {
     try {
       DocumentSnapshot snapshot = await _userReference.doc(id).get();
+      var birth = DateTime.now();
+
+      try {
+        birth = snapshot['birth'].toDate();
+      } catch (e) {
+        log('_ $e');
+      }
+
       return UserModel(
         id: id,
         email: snapshot['email'],
         name: snapshot['name'],
         password: snapshot['password'],
         role: snapshot['role'],
-        birth: snapshot['birth'],
+        birth: birth,
         gender: snapshot['gender'],
         phone: snapshot['phone'],
         address: snapshot['address'],
       );
     } catch (e) {
+      log('_ $e');
       rethrow;
     }
   }

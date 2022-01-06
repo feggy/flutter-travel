@@ -12,7 +12,7 @@ class WisataCubit extends Cubit<WisataState> {
 
   void addWisata({
     required String nama,
-    required String biaya,
+    required int biaya,
     required String deskripsiHari,
     required String imageUrl,
     required List<HariModel> agenda,
@@ -47,7 +47,7 @@ class WisataCubit extends Cubit<WisataState> {
   void editWisata({
     required String id,
     required String nama,
-    required String biaya,
+    required int biaya,
     required String deskripsiHari,
     required String imageUrl,
     required List<HariModel> agenda,

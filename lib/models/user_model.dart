@@ -8,7 +8,7 @@ class UserModel extends Equatable {
   final String name;
   final String password;
   final String role;
-  final String birth;
+  final DateTime birth;
   final String gender;
   final String phone;
   final String address;
@@ -58,7 +58,7 @@ class UserModel extends Equatable {
     String? name,
     String? password,
     String? role,
-    String? birth,
+    DateTime? birth,
     String? gender,
     String? phone,
     String? address,
@@ -83,7 +83,7 @@ class UserModel extends Equatable {
       'name': name,
       'password': password,
       'role': role,
-      'birth': birth,
+      'birth': birth.millisecondsSinceEpoch,
       'gender': gender,
       'phone': phone,
       'address': address,
@@ -92,21 +92,25 @@ class UserModel extends Equatable {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      email: map['email'],
-      name: map['name'],
-      password: map['password'],
-      role: map['role'],
-      birth: map['birth'],
-      gender: map['gender'],
-      phone: map['phone'],
-      address: map['address'],
+      id: map['id'] ?? '',
+      email: map['email'] ?? '',
+      name: map['name'] ?? '',
+      password: map['password'] ?? '',
+      role: map['role'] ?? '',
+      birth: map['birth'].toDate(),
+      gender: map['gender'] ?? '',
+      phone: map['phone'] ?? '',
+      address: map['address'] ?? '',
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  // factory UserModel.fromJson(String source) => UserModel.fromMap(json.decode(source));
-
   @override
   bool get stringify => true;
+
+  @override
+  String toString() {
+    return 'UserModel(id: $id, email: $email, name: $name, password: $password, role: $role, birth: $birth, gender: $gender, phone: $phone, address: $address)';
+  }
 }

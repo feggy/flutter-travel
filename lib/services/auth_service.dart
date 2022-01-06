@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_wisata/models/user_model.dart';
 import 'package:travel_wisata/services/user_service.dart';
 
@@ -29,7 +32,7 @@ class AuthService {
           name: name,
           password: password,
           role: role,
-          birth: birth,
+          birth: DateFormat("dd MMMM yyyy").parse(birth),
           gender: gender,
           phone: phone,
           address: address);

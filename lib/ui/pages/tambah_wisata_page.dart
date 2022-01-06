@@ -50,7 +50,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
 
     if (widget.data != null) {
       namaController.text = widget.data!.nama;
-      biayaController.text = widget.data!.biaya;
+      biayaController.text = widget.data!.biaya.toString();
       deskripsiHariController.text = widget.data!.deskripsiHari;
       pemanduController.text = widget.data!.pemandu;
 
@@ -258,7 +258,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                   if (widget.data == null) {
                     context.read<WisataCubit>().addWisata(
                           nama: namaController.text,
-                          biaya: biayaController.text,
+                          biaya: int.parse(biayaController.text),
                           deskripsiHari: deskripsiHariController.text,
                           imageUrl: imageUrl,
                           agenda: dataList,
@@ -268,7 +268,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                     context.read<WisataCubit>().editWisata(
                           id: widget.data!.id,
                           nama: namaController.text,
-                          biaya: biayaController.text,
+                          biaya: int.parse(biayaController.text),
                           deskripsiHari: deskripsiHariController.text,
                           imageUrl: imageUrl,
                           agenda: dataList,
