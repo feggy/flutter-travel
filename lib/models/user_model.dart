@@ -33,7 +33,7 @@ class UserModel extends Equatable {
         phone: json['phone'],
         role: json['role'],
         address: json['address'],
-        birth: json['birth'],
+        birth: json['birth'].toDate(),
         gender: json['gender'],
       );
 

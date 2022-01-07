@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +24,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     getRole();
-    Timer(const Duration(seconds: 3), () {
+    Timer(Duration(seconds: kIsWeb ? 0 : 3), () {
       //NOTE READ cek current user ke firebase authentication
       User? user = FirebaseAuth.instance.currentUser;
       if (role.isNotEmpty && user != null) {

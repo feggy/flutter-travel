@@ -17,6 +17,7 @@ class WisataCubit extends Cubit<WisataState> {
     required String imageUrl,
     required List<HariModel> agenda,
     required String pemandu,
+    required List<dynamic> tanggalBerangkat,
   }) async {
     try {
       emit(WisataLoadingAdd());
@@ -31,6 +32,7 @@ class WisataCubit extends Cubit<WisataState> {
         imageUrl: imageUrl,
         agenda: agenda,
         pemandu: pemandu,
+        tanggalBerangkat: tanggalBerangkat,
       );
 
       await WisataService()
@@ -52,6 +54,7 @@ class WisataCubit extends Cubit<WisataState> {
     required String imageUrl,
     required List<HariModel> agenda,
     required String pemandu,
+    required List<dynamic> tanggalBerangkat,
   }) async {
     try {
       emit(WisataLoadingAdd());
@@ -64,6 +67,7 @@ class WisataCubit extends Cubit<WisataState> {
         imageUrl: imageUrl,
         agenda: agenda,
         pemandu: pemandu,
+        tanggalBerangkat: tanggalBerangkat,
       );
 
       await WisataService()

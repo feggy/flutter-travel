@@ -122,7 +122,7 @@ class HalamanKendaliSupirPage extends StatelessWidget {
                       category: 'TRAVEL',
                       idTravel: listRes[0].travel!.id,
                       tanggalBerangkat:
-                          listRes[0].transaction!.tanggalBerangkat);
+                          listRes[0].transaction!.tanggalBerangkat.toString());
                 });
               });
         },
@@ -159,7 +159,7 @@ class HalamanKendaliSupirPage extends StatelessWidget {
                       category: 'TRAVEL',
                       idTravel: listRes[0].travel!.id,
                       tanggalBerangkat:
-                          listRes[0].transaction!.tanggalBerangkat);
+                          listRes[0].transaction!.tanggalBerangkat.toString());
                 });
               });
         },

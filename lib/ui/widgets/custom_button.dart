@@ -35,14 +35,16 @@ class CustomButton extends StatelessWidget {
             width: width,
             height: height,
             child: Center(
-              child: Text(
-                title,
-                style: textStyle ??
-                    whiteTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: semiBold,
-                      color: whiteColor,
-                    ),
+              child: FittedBox(
+                child: Text(
+                  title,
+                  style: textStyle ??
+                      whiteTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semiBold,
+                        color: whiteColor,
+                      ),
+                ),
               ),
             ),
           )),

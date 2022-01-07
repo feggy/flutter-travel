@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
@@ -198,14 +199,15 @@ class _FormPendaftaranPageState extends State<FormPendaftaranPage> {
                     idInvoice: idInvoice,
                     idTravel: idTravel,
                     emailUser: email,
-                    tanggalBerangkat: widget.tglBerangkat,
+                    tanggalBerangkat:
+                        DateFormat("dd MMM yyyy").parse(widget.tglBerangkat),
                     listTraveler: listTraveler,
                     imageTransfer: '',
                     category: widget.category,
                     status: 0,
                     phoneUser: phone,
                     namaUser: name,
-                    timeCreated: DateTime.now().toString(),
+                    timeCreated: DateTime.now(),
                     jobFor: jobFor,
                   );
                   Navigator.pushNamed(context, '/konfirmasi_pesanan',

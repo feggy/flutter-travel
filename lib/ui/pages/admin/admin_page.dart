@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/daftar_pelanggan_page.dart';
+import 'package:travel_wisata/ui/pages/rekap/rekap_transaksi_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/single_text_card.dart';
 
@@ -15,62 +17,107 @@ class AdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget listCard() {
-      return Column(
-        children: [
-          SingleTextCard(
-            text: 'Daftar Transaksi',
-            onPressed: () {
-              Navigator.pushNamed(context, '/transaksi_admin');
-            },
-          ),
-          SingleTextCard(
-            text: 'Kelola Daftar Wisata',
-            onPressed: () {
-              Navigator.pushNamed(context, '/wisata_admin');
-            },
-          ),
-          SingleTextCard(
-            text: 'Kelola Daftar Travel',
-            onPressed: () {
-              Navigator.pushNamed(context, '/bus_admin');
-            },
-          ),
-          SingleTextCard(
-            text: 'Daftar Pemandu Wisata',
-            onPressed: () {
-              Navigator.pushNamed(context, '/pemandu');
-            },
-          ),
-          SingleTextCard(
-            text: 'Daftar Pelanggan',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (builder) => const DaftarPelangganPage(),
-                ),
-              );
-            },
-          ),
-          // SingleTextCard(
-          //   text: 'Kelola Supir',
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, '/supir');
-          //   },
-          // ),
-          SingleTextCard(
-            text: 'Ubah Profil',
-            onPressed: () {
-              Navigator.pushNamed(context, '/ubah_profil');
-            },
-          ),
-        ],
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: kIsWeb ? MediaQuery.of(context).size.width / 5 : 0,
+        ),
+        child: Column(
+          children: [
+            SingleTextCard(
+              text: 'Daftar Transaksi',
+              onPressed: () {
+                Navigator.pushNamed(context, '/transaksi_admin');
+              },
+            ),
+            SingleTextCard(
+              text: 'Kelola Daftar Wisata',
+              onPressed: () {
+                Navigator.pushNamed(context, '/wisata_admin');
+              },
+            ),
+            SingleTextCard(
+              text: 'Kelola Daftar Travel',
+              onPressed: () {
+                Navigator.pushNamed(context, '/bus_admin');
+              },
+            ),
+            SingleTextCard(
+              text: 'Daftar Pemandu Wisata',
+              onPressed: () {
+                Navigator.pushNamed(context, '/pemandu');
+              },
+            ),
+            SingleTextCard(
+              text: 'Daftar Pelanggan',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const DaftarPelangganPage(),
+                  ),
+                );
+              },
+            ),
+            // SingleTextCard(
+            //   text: 'Kelola Supir',
+            //   onPressed: () {
+            //     Navigator.pushNamed(context, '/supir');
+            //   },
+            // ),
+            SingleTextCard(
+              text: 'Rekap Transaksi',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) => const RekapTransaksiPage(),
+                  ),
+                );
+              },
+            ),
+            SingleTextCard(
+              text: 'Ubah Profil',
+              onPressed: () {
+                Navigator.pushNamed(context, '/ubah_profil');
+              },
+            ),
+          ],
+        ),
       );
     }
 
     void removePref() async {
       final pref = await SharedPreferences.getInstance();
       pref.clear();
+    }
+
+    Widget logout() {
+      return BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthInitial) {
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (route) => false);
+          } else if (state is AuthFailed) {
+            log('ERROR ${state.error}');
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(state.error),
+              backgroundColor: redColor,
+            ));
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const CircularProgressIndicator();
+          }
+          return CustomButton(
+            title: 'LOGOUT',
+            onPressed: () {
+              removePref();
+              context.read<AuthCubit>().logout();
+            },
+          );
+        },
+      );
     }
 
     return Scaffold(
@@ -89,12 +136,25 @@ class AdminPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Beranda Admin',
-                        style: blackTextStyle.copyWith(
-                          fontSize: 24,
-                          fontWeight: semiBold,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Beranda Admin',
+                              style: blackTextStyle.copyWith(
+                                fontSize: 24,
+                                fontWeight: semiBold,
+                              ),
+                            ),
+                          ),
+                          kIsWeb
+                              ? SizedBox(
+                                  width: 80,
+                                  height: 25,
+                                  child: logout(),
+                                )
+                              : const SizedBox(),
+                        ],
                       ),
                       const SizedBox(
                         height: 70,
@@ -104,32 +164,7 @@ class AdminPage extends StatelessWidget {
                   ),
                 ),
               ),
-              BlocConsumer<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  if (state is AuthInitial) {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                  } else if (state is AuthFailed) {
-                    log('ERROR ${state.error}');
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(state.error),
-                      backgroundColor: redColor,
-                    ));
-                  }
-                },
-                builder: (context, state) {
-                  if (state is AuthLoading) {
-                    return const CircularProgressIndicator();
-                  }
-                  return CustomButton(
-                    title: 'LOGOUT',
-                    onPressed: () {
-                      removePref();
-                      context.read<AuthCubit>().logout();
-                    },
-                  );
-                },
-              ),
+              !kIsWeb ? logout() : const SizedBox(),
               const SizedBox(
                 height: 30,
               ),

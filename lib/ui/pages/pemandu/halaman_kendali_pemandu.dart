@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/lokasi_model.dart';
@@ -162,7 +163,8 @@ class _HalamanKendaliPemanduState extends State<HalamanKendaliPemandu> {
                 ),
                 Expanded(
                   child: Text(
-                    widget.res!.transaction!.tanggalBerangkat,
+                    DateFormat("dd MMMM yyyy")
+                        .format(widget.res!.transaction!.tanggalBerangkat),
                     style: blackTextStyle.copyWith(fontSize: 12),
                     textAlign: TextAlign.right,
                   ),

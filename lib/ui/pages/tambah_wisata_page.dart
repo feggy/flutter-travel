@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_wisata/cubit/wisata_cubit.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
 import 'package:travel_wisata/services/user_service.dart';
@@ -42,6 +43,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
   var bytes;
 
   List<HariModel> dataList = [];
+  List<dynamic> tglBerangkatList = [];
 
   @override
   void initState() {
@@ -56,6 +58,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
 
       setState(() {
         dataList = widget.data!.agenda;
+        tglBerangkatList = widget.data!.tanggalBerangkat;
       });
     }
   }
@@ -95,7 +98,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
             'Upload Cover',
             style: blackTextStyle.copyWith(
               fontSize: 14,
-              fontWeight: medium,
+              fontWeight: semiBold,
             ),
           ),
           const SizedBox(
@@ -126,9 +129,16 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
     }
 
     Widget buttonTambahAgenda() {
-      return CustomButton(
-        title: 'TAMBAH AGENDA',
-        color: grey3Color,
+      return TextButton(
+        child: Text(
+          'Tambah Agenda',
+          style: blackTextStyle.copyWith(
+            fontSize: 11,
+            fontWeight: medium,
+            color: Colors.blue[800],
+            decoration: TextDecoration.underline,
+          ),
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/tambah_agenda').then((value) {
             if (value != null) {
@@ -161,11 +171,6 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
             }
           });
         },
-        textStyle: blackTextStyle.copyWith(
-          fontSize: 14,
-          fontWeight: semiBold,
-        ),
-        height: 35,
       );
     }
 
@@ -245,6 +250,8 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                   errorMsg = "Kolom pemandu tidak boleh kosong";
                 } else if (pemanduCheck == false) {
                   errorMsg = "Data pemandu tidak ditemukan";
+                } else if (tglBerangkatList.isEmpty) {
+                  errorMsg = 'Tanggal berangkat ditambahkan';
                 }
 
                 if (errorMsg.isNotEmpty) {
@@ -263,6 +270,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                           imageUrl: imageUrl,
                           agenda: dataList,
                           pemandu: pemandu,
+                          tanggalBerangkat: tglBerangkatList,
                         );
                   } else {
                     context.read<WisataCubit>().editWisata(
@@ -273,6 +281,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                           imageUrl: imageUrl,
                           agenda: dataList,
                           pemandu: pemandu,
+                          tanggalBerangkat: tglBerangkatList,
                         );
                   }
                 }
@@ -406,6 +415,128 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
               .toList());
     }
 
+    Widget listTglBerangkat() {
+      var list = tglBerangkatList..sort((a, b) => a.compareTo(b));
+
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: list
+            .map(
+              (e) => Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showDatePicker(
+                        context: context,
+                        initialDate: e,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime(2100),
+                        initialEntryMode: DatePickerEntryMode.calendarOnly,
+                      ).then((value) {
+                        setState(() {
+                          if (value != null) {
+                            tglBerangkatList.remove(e);
+                            tglBerangkatList.add(value);
+                          }
+                        });
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+                      margin: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                        width: 1,
+                        color: Colors.grey,
+                      )),
+                      child: Text(DateFormat("dd MMMM yyyy").format(e)),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        tglBerangkatList.remove(e);
+                      });
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child: Icon(
+                        Icons.delete_forever_rounded,
+                        color: greyColor,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
+      );
+    }
+
+    Widget headerTglTersedia() {
+      return Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Tanggal Tersedia',
+              style: blackTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: semiBold,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime.now(),
+                lastDate: DateTime(2100),
+                initialEntryMode: DatePickerEntryMode.calendarOnly,
+              ).then((value) {
+                setState(() {
+                  if (value != null) {
+                    tglBerangkatList.add(value);
+                  }
+                });
+              });
+            },
+            child: Text(
+              'Tambah Tanggal',
+              style: blackTextStyle.copyWith(
+                fontSize: 11,
+                fontWeight: medium,
+                color: Colors.blue[800],
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    Widget headerAgendaPerjalanan() {
+      return Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Agenda Perjalanan',
+              style: blackTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: semiBold,
+              ),
+            ),
+          ),
+          buttonTambahAgenda(),
+        ],
+      );
+    }
+
     return Scaffold(
       appBar: AppBarItem(
           title: widget.data == null ? 'Tambah Wisata' : 'Ubah Wisata'),
@@ -413,74 +544,78 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
+            child: ListView(
               padding: const EdgeInsets.only(
                 top: 40,
                 bottom: 100,
                 left: 20,
                 right: 20,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomInputText(
-                    label: 'Nama',
-                    controller: namaController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomInputText(
-                    label: 'Biaya',
-                    controller: biayaController,
-                    inputType: TextInputType.number,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  CustomInputText(
-                    label: 'Deskripsi Lama Perjalanan',
-                    controller: deskripsiHariController,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  inputPemandu(),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  uploadCover(),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Text(
-                    'Agenda Perjalanan',
-                    style: blackTextStyle.copyWith(
-                      fontSize: 14,
-                      fontWeight: medium,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  if (dataList.isNotEmpty)
-                    listWisata()
-                  else
-                    Center(
-                      child: Text(
-                        'Belum ada agenda yang ditambahkan',
-                        style: blackTextStyle.copyWith(
-                          fontSize: 12,
-                          fontWeight: medium,
+              children: [
+                CustomInputText(
+                  label: 'Nama',
+                  controller: namaController,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomInputText(
+                  label: 'Biaya',
+                  controller: biayaController,
+                  inputType: TextInputType.number,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                CustomInputText(
+                  label: 'Deskripsi Lama Perjalanan',
+                  controller: deskripsiHariController,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                inputPemandu(),
+                const SizedBox(
+                  height: 15,
+                ),
+                headerTglTersedia(),
+                tglBerangkatList.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Belum ada tanggal keberangakatan yang ditambahkan',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: medium,
+                          ),
+                        ),
+                      )
+                    : listTglBerangkat(),
+                const SizedBox(
+                  height: 15,
+                ),
+                uploadCover(),
+                const SizedBox(
+                  height: 15,
+                ),
+                headerAgendaPerjalanan(),
+                const SizedBox(
+                  height: 10,
+                ),
+                dataList.isNotEmpty
+                    ? listWisata()
+                    : Center(
+                        child: Text(
+                          'Belum ada agenda yang ditambahkan',
+                          style: blackTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: medium,
+                          ),
                         ),
                       ),
-                    ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  buttonTambahAgenda(),
-                ],
-              ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
             ),
           ),
           const SizedBox(

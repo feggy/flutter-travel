@@ -16,14 +16,14 @@ class TransactionModel extends Equatable {
   final String idInvoice;
   final String idTravel;
   final String emailUser;
-  final String tanggalBerangkat;
+  final DateTime tanggalBerangkat;
   final List<Traveler> listTraveler;
   String imageTransfer;
   final String category;
   int status;
   String namaUser;
   String phoneUser;
-  String timeCreated;
+  DateTime timeCreated;
   String jobFor;
 
   TransactionModel({
@@ -80,7 +80,7 @@ class TransactionModel extends Equatable {
       idInvoice: map['idInvoice'],
       idTravel: map['idTravel'],
       emailUser: map['emailUser'],
-      tanggalBerangkat: map['tanggalBerangkat'],
+      tanggalBerangkat: map['tanggalBerangkat'].toDate(),
       listTraveler: List<Traveler>.from(
           map['listTraveler']?.map((x) => Traveler.fromMap(x))),
       imageTransfer: map['imageTransfer'],
@@ -88,7 +88,7 @@ class TransactionModel extends Equatable {
       status: map['status'],
       namaUser: map['namaUser'],
       phoneUser: map['phoneUser'],
-      timeCreated: map['timeCreated'],
+      timeCreated: map['timeCreated'].toDate(),
       jobFor: map['jobFor'],
     );
   }

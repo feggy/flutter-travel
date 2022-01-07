@@ -466,7 +466,8 @@ class _DetailTransactionAdminPageState
             kategori = res!.transaction!.category;
             imageUrl = res!.transaction!.imageTransfer;
             jumlah = res!.transaction!.listTraveler.length;
-            tglKeberangkatan = res!.transaction!.tanggalBerangkat;
+            tglKeberangkatan = DateFormat("dd MMMM yyyy")
+                .format(res!.transaction!.tanggalBerangkat);
             biaya = '';
             total = '';
             status = res!.transaction!.status;
@@ -483,9 +484,7 @@ class _DetailTransactionAdminPageState
             }
 
             var formatter = DateFormat('dd MMM yyyy hh:mm');
-            var format = DateFormat("yyyy-MM-dd hh:mm")
-                .parse(res!.transaction!.timeCreated);
-            tglTransaksi = formatter.format(format);
+            tglTransaksi = formatter.format(res!.transaction!.timeCreated);
 
             String toIdr(int s) {
               return NumberFormat.currency(

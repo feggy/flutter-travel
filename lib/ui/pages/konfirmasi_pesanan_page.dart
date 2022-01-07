@@ -59,7 +59,7 @@ class KonfirmasiPesananPage extends StatelessWidget {
         title: title,
         price: priceRp,
         desc: desc,
-        date: tglBerangkat,
+        date: DateFormat("dd MMMM yyyy").format(tglBerangkat),
       );
     }
 

@@ -54,7 +54,8 @@ class _SupirPageState extends State<SupirPage> {
 
                     var unique = <String, bool>{};
                     for (var key in listRes) {
-                      unique[key.transaction!.tanggalBerangkat] = true;
+                      unique[key.transaction!.tanggalBerangkat.toString()] =
+                          true;
                     }
 
                     return Column(

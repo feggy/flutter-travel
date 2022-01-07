@@ -2,9 +2,7 @@
 
 import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_wisata/cubit/alasan_cubit.dart';
@@ -192,6 +190,16 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
         return false;
       }
 
+      bool _availableDate(DateTime day) {
+        var result = false;
+        for (var element in widget.data.tanggalBerangkat) {
+          if (day.compareTo(element) == 0) {
+            result = true;
+          }
+        }
+        return result;
+      }
+
       return GestureDetector(
         onTap: () {
           showDatePicker(
@@ -200,7 +208,7 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
             firstDate: DateTime(2022),
             lastDate: DateTime(2030),
             initialEntryMode: DatePickerEntryMode.calendarOnly,
-            // selectableDayPredicate: _decideWhichDayToEnable,
+            selectableDayPredicate: _availableDate,
           ).then((value) {
             setState(() {
               tglBerangkat = formatter.format(value!);
@@ -280,11 +288,20 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
                 title: 'PESAN SEKARANG',
                 onPressed: () {
                   if (tglBerangkat == "Pilih tanggal") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                    log('_true');
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: const Text('Gagal'),
                         content: const Text(
-                            'Pilih tanggal keberangkatn terlebih dahulu'),
-                        backgroundColor: redColor,
+                            'Pilih tanggal keberangkatan terlebih dahulu'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('OK'))
+                        ],
                       ),
                     );
                   } else {
@@ -385,6 +402,26 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
           });
     }
 
+    Widget listTanggal() {
+      var list = widget.data.tanggalBerangkat..sort((a, b) => a.compareTo(b));
+
+      return Column(
+        children: list
+            .map((e) =>
+                e.isAfter(DateTime.now().subtract(const Duration(days: 1)))
+                    ? Text(
+                        '- ${DateFormat("dd MMMM yyyy").format(e)}',
+                        style: blackTextStyle.copyWith(
+                          fontSize: 12,
+                          fontWeight: semiBold,
+                        ),
+                        textAlign: TextAlign.start,
+                      )
+                    : const SizedBox())
+            .toList(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: AnnotatedRegion(
@@ -413,6 +450,18 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
                             height: 25,
                           ),
                           agenda(),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            'Tersedia untuk',
+                            style: blackTextStyle.copyWith(
+                              fontSize: 12,
+                              fontWeight: semiBold,
+                            ),
+                            textAlign: TextAlign.start,
+                          ),
+                          listTanggal(),
                           const SizedBox(
                             height: 10,
                           ),

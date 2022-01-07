@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/models/role_enum.dart';
@@ -73,7 +74,7 @@ class _TransactionPageState extends State<TransactionPage> {
                       children: state.list.map((e) {
                         var nama = '';
                         var harga =
-                            'Tanggal berangkat ${e.transaction!.tanggalBerangkat}';
+                            'Tanggal berangkat ${DateFormat("dd MMM yyyy").format(e.transaction!.tanggalBerangkat)}';
                         var imageUrl = '';
                         var status = e.transaction!.status;
 

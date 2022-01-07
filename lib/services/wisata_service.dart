@@ -43,6 +43,7 @@ class WisataService {
         'imageUrl': data.imageUrl,
         'agenda': agendaMap,
         'pemandu': data.pemandu,
+        'tanggalBerangkat': data.tanggalBerangkat,
       }).then((value) {
         log('wisata berhasil di tambahkan');
         response = 'Berhasil menambahkan data wisata baru';
@@ -86,6 +87,7 @@ class WisataService {
             'imageUrl': data.imageUrl,
             'agenda': agendaMap,
             'pemandu': data.pemandu,
+            'tanggalBerangkat': data.tanggalBerangkat,
           }).then((value) {
             status = true;
           }).catchError((onError) {

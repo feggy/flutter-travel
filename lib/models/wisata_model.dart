@@ -10,6 +10,7 @@ class WisataModel extends Equatable {
   final String imageUrl;
   List<HariModel> agenda;
   final String pemandu;
+  List<dynamic> tanggalBerangkat;
 
   WisataModel({
     required this.id,
@@ -19,6 +20,7 @@ class WisataModel extends Equatable {
     required this.imageUrl,
     required this.agenda,
     required this.pemandu,
+    required this.tanggalBerangkat,
   });
 
   factory WisataModel.fromJson(Map<String, dynamic> json) => WisataModel(
@@ -31,15 +33,24 @@ class WisataModel extends Equatable {
             .map((e) => HariModel.fromJson(e))
             .toList(),
         pemandu: json['pemandu'],
+        tanggalBerangkat:
+            List.from(json['tanggalBerangkat']).map((e) => e.toDate()).toList(),
       );
 
   @override
-  List<Object?> get props =>
-      [id, nama, biaya, deskripsiHari, imageUrl, agenda.toList()];
+  List<Object?> get props => [
+        id,
+        nama,
+        biaya,
+        deskripsiHari,
+        imageUrl,
+        agenda.toList(),
+        tanggalBerangkat.toList()
+      ];
 
   @override
   String toString() {
-    return '{id: "$id", nama: "$nama", biaya: "$biaya", deskripsiHari: "$deskripsiHari", imageUrl: "$imageUrl", agenda: "$agenda"}';
+    return 'WisataModel(id: $id, nama: $nama, biaya: $biaya, deskripsiHari: $deskripsiHari, imageUrl: $imageUrl, agenda: $agenda, pemandu: $pemandu, tanggalBerangkat: $tanggalBerangkat)';
   }
 }
 

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:travel_wisata/cubit/transaction_cubit.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
@@ -40,7 +41,7 @@ class _TransactionAdminPageState extends State<TransactionAdminPage> {
               children: state.list.map((e) {
                 var nama = '';
                 var harga =
-                    'Tanggal berangkat ${e.transaction!.tanggalBerangkat}';
+                    'Tanggal berangkat ${DateFormat("dd MMM yyyy").format(e.transaction!.tanggalBerangkat)}';
                 var imageUrl = '';
                 var status = e.transaction!.status;
 
