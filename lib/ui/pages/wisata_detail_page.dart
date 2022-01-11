@@ -38,6 +38,8 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
   var tglBerangkat = 'Pilih tanggal';
   List<AlasanModel> listAlasan = [];
 
+  var selected = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -193,7 +195,8 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
       bool _availableDate(DateTime day) {
         var result = false;
         for (var element in widget.data.tanggalBerangkat) {
-          if (day.compareTo(element) == 0) {
+          selected = element;
+          if (day.compareTo(element as DateTime) == 0) {
             result = true;
           }
         }
@@ -204,7 +207,7 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: DateTime.now(),
+            initialDate: selected,
             firstDate: DateTime(2022),
             lastDate: DateTime(2030),
             initialEntryMode: DatePickerEntryMode.calendarOnly,
@@ -404,8 +407,10 @@ class _WisataDetailPageState extends State<WisataDetailPage> {
 
     Widget listTanggal() {
       var list = widget.data.tanggalBerangkat..sort((a, b) => a.compareTo(b));
+      selected = list[0];
 
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: list
             .map((e) =>
                 e.isAfter(DateTime.now().subtract(const Duration(days: 1)))

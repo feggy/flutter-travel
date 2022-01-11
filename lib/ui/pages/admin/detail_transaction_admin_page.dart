@@ -143,316 +143,315 @@ class _DetailTransactionAdminPageState
       );
     }
 
-    return Scaffold(
-      appBar: AppBarItem(title: 'Rincian Transaksi'),
-      backgroundColor: whiteColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await screenshotController
-              .capture(delay: const Duration(milliseconds: 10))
-              .then((image) async {
-            log('_ $image');
+    Widget btnCetak() {
+      return CustomButton(
+          title: 'CETAK',
+          color: Colors.grey[100]!,
+          textStyle: blackTextStyle.copyWith(fontWeight: semiBold),
+          onPressed: () async {
+            await screenshotController
+                .capture(delay: const Duration(milliseconds: 10))
+                .then((image) async {
+              log('_ $image');
 
-            final directory = await getApplicationDocumentsDirectory();
+              final directory = await getApplicationDocumentsDirectory();
 
-            // if (image != null) {
-            //   final imagePath =
-            //       await File('${directory.path}/image.png').create();
-            //   await imagePath.writeAsBytes(image);
-            //   log('_image $imagePath');
-            // }
+              final pdf = pw.Document();
 
-            final pdf = pw.Document();
-
-            pdf.addPage(pw.Page(build: (pw.Context context) {
-              var widthh = 150.0;
-              return pw.Column(children: [
-                pw.Center(
-                  child: pw.Column(
-                      mainAxisAlignment: pw.MainAxisAlignment.center,
-                      children: [
-                        pw.Text(
-                          'Maiga Tour & Travel',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                        ),
-                        pw.Text(
-                          'Jl. Inpres, Samping Gg. Sejahtera Pekanbaru, Riau',
-                        ),
-                        pw.Text(
-                          '0761-7436-266 | 0852-6535-9555 | 0852-6429-6524',
-                          textAlign: pw.TextAlign.center,
-                        ),
-                        pw.SizedBox(height: 50),
-                        pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: [
-                            pw.Text(
-                              'Detail Pelanggan',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                            ),
-                            pw.SizedBox(
-                              height: 10,
-                            ),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Nama:',
-                                  ),
-                                ),
-                                pw.Text(
-                                  nama,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Nomor hp:',
-                                  ),
-                                ),
-                                pw.Text(
-                                  phone,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Email:',
-                                  ),
-                                ),
-                                pw.Text(
-                                  email,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(
-                              height: 20,
-                            ),
-                            pw.Text(
-                              'Detail Pemesanan',
-                              style:
-                                  pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                            ),
-                            pw.SizedBox(
-                              height: 10,
-                            ),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Id tagihan:',
-                                  ),
-                                ),
-                                pw.Text(
-                                  idInvoice,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
+              pdf.addPage(pw.Page(build: (pw.Context context) {
+                var widthh = 150.0;
+                return pw.Column(children: [
+                  pw.Center(
+                    child: pw.Column(
+                        mainAxisAlignment: pw.MainAxisAlignment.center,
+                        children: [
+                          pw.Text(
+                            'Maiga Tour & Travel',
+                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                          ),
+                          pw.Text(
+                            'Jl. Inpres, Samping Gg. Sejahtera Pekanbaru, Riau',
+                          ),
+                          pw.Text(
+                            '0761-7436-266 | 0852-6535-9555 | 0852-6429-6524',
+                            textAlign: pw.TextAlign.center,
+                          ),
+                          pw.SizedBox(height: 50),
+                          pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: [
+                              pw.Text(
+                                'Detail Pelanggan',
+                                style: pw.TextStyle(
+                                    fontWeight: pw.FontWeight.bold),
+                              ),
+                              pw.SizedBox(
+                                height: 10,
+                              ),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
                                     width: widthh,
                                     child: pw.Text(
                                       'Nama:',
-                                    )),
-                                pw.Text(
-                                  title,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Kategori:',
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  kategori,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Jumlah pelanggan:',
+                                  pw.Text(
+                                    nama,
                                   ),
-                                ),
-                                pw.Text(
-                                  '$jumlah Orang',
-                                  textAlign: pw.TextAlign.right,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Tanggal keberangkatan:',
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Nomor hp:',
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  tglKeberangkatan,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(
-                              height: 20,
-                            ),
-                            pw.Text('Detail Pembayaran',
+                                  pw.Text(
+                                    phone,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Email:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    email,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(
+                                height: 20,
+                              ),
+                              pw.Text(
+                                'Detail Pemesanan',
                                 style: pw.TextStyle(
-                                    fontWeight: pw.FontWeight.bold)),
-                            pw.SizedBox(
-                              height: 10,
-                            ),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Waktu pembayaran:',
+                                    fontWeight: pw.FontWeight.bold),
+                              ),
+                              pw.SizedBox(
+                                height: 10,
+                              ),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Id tagihan:',
+                                    ),
                                   ),
-                                ),
-                                pw.Text(
-                                  tglTransaksi,
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Biaya:',
+                                  pw.Text(
+                                    idInvoice,
                                   ),
-                                ),
-                                pw.Text(
-                                  '$biaya/orang',
-                                ),
-                              ],
-                            ),
-                            pw.SizedBox(height: 5),
-                            pw.Row(
-                              children: [
-                                pw.SizedBox(
-                                  width: widthh,
-                                  child: pw.Text(
-                                    'Total Pembayaran:',
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                      width: widthh,
+                                      child: pw.Text(
+                                        'Nama:',
+                                      )),
+                                  pw.Text(
+                                    title,
                                   ),
-                                ),
-                                pw.Text(total,
-                                    style: pw.TextStyle(
-                                        fontWeight: pw.FontWeight.bold)),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ]),
-                ),
-              ]);
-            }));
-
-            if (res!.transaction!.category == 'WISATA') {
-              pdf.addPage(pw.Page(build: (pw.Context context) {
-                return pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text('Agenda Perjalanan',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.SizedBox(height: 5),
-                      pw.Column(
-                          children: res!.wisata!.agenda
-                              .map((e) => pw.Column(
-                                      crossAxisAlignment:
-                                          pw.CrossAxisAlignment.start,
-                                      children: [
-                                        pw.Text('Hari ke ${e.dayOfNumber}'),
-                                        pw.Column(
-                                          children: e.agenda
-                                              .map((e) => pw.Padding(
-                                                    padding: const pw
-                                                        .EdgeInsets.only(
-                                                      top: 5,
-                                                    ),
-                                                    child: pw.Row(
-                                                      crossAxisAlignment: pw
-                                                          .CrossAxisAlignment
-                                                          .start,
-                                                      children: [
-                                                        pw.SizedBox(
-                                                          width: 90,
-                                                          child: pw.Text(
-                                                              '${e.startTime} - ${e.endTime}'),
-                                                        ),
-                                                        pw.Expanded(
-                                                          child: pw.Text(
-                                                              e.deskripsi),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ))
-                                              .toList(),
-                                        ),
-                                        pw.SizedBox(height: 10),
-                                      ]))
-                              .toList()),
-                      pw.SizedBox(height: 10),
-                      pw.Text('Pemandu : ${res!.wisata!.pemandu}'),
-                      pw.SizedBox(height: 20),
-                      pw.Text('Daftar Peserta',
-                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                      pw.SizedBox(height: 5),
-                      pw.Column(
-                          crossAxisAlignment: pw.CrossAxisAlignment.start,
-                          children: res!.transaction!.listTraveler
-                              .map((e) => pw.Text(
-                                  '- ${e.nama}(${e.umur}th) ${e.jenisKelamin}'))
-                              .toList()),
-                      pw.SizedBox(height: 20),
-                    ]);
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Kategori:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    kategori,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Jumlah pelanggan:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    '$jumlah Orang',
+                                    textAlign: pw.TextAlign.right,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Tanggal keberangkatan:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    tglKeberangkatan,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(
+                                height: 20,
+                              ),
+                              pw.Text('Detail Pembayaran',
+                                  style: pw.TextStyle(
+                                      fontWeight: pw.FontWeight.bold)),
+                              pw.SizedBox(
+                                height: 10,
+                              ),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Waktu pembayaran:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    tglTransaksi,
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Biaya:',
+                                    ),
+                                  ),
+                                  pw.Text(
+                                    '$biaya/orang',
+                                  ),
+                                ],
+                              ),
+                              pw.SizedBox(height: 5),
+                              pw.Row(
+                                children: [
+                                  pw.SizedBox(
+                                    width: widthh,
+                                    child: pw.Text(
+                                      'Total Pembayaran:',
+                                    ),
+                                  ),
+                                  pw.Text(total,
+                                      style: pw.TextStyle(
+                                          fontWeight: pw.FontWeight.bold)),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ]),
+                  ),
+                ]);
               }));
-            }
 
-            String namaFile = '$nama $phone';
+              if (res!.transaction!.category == 'WISATA') {
+                pdf.addPage(pw.Page(build: (pw.Context context) {
+                  return pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text('Agenda Perjalanan',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 5),
+                        pw.Column(
+                            children: res!.wisata!.agenda
+                                .map((e) => pw.Column(
+                                        crossAxisAlignment:
+                                            pw.CrossAxisAlignment.start,
+                                        children: [
+                                          pw.Text('Hari ke ${e.dayOfNumber}'),
+                                          pw.Column(
+                                            children: e.agenda
+                                                .map((e) => pw.Padding(
+                                                      padding: const pw
+                                                          .EdgeInsets.only(
+                                                        top: 5,
+                                                      ),
+                                                      child: pw.Row(
+                                                        crossAxisAlignment: pw
+                                                            .CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          pw.SizedBox(
+                                                            width: 90,
+                                                            child: pw.Text(
+                                                                '${e.startTime} - ${e.endTime}'),
+                                                          ),
+                                                          pw.Expanded(
+                                                            child: pw.Text(
+                                                                e.deskripsi),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ))
+                                                .toList(),
+                                          ),
+                                          pw.SizedBox(height: 10),
+                                        ]))
+                                .toList()),
+                        pw.SizedBox(height: 10),
+                        pw.Text('Pemandu : ${res!.wisata!.pemandu}'),
+                        pw.SizedBox(height: 20),
+                        pw.Text('Daftar Peserta',
+                            style:
+                                pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                        pw.SizedBox(height: 5),
+                        pw.Column(
+                            crossAxisAlignment: pw.CrossAxisAlignment.start,
+                            children: res!.transaction!.listTraveler
+                                .map((e) => pw.Text(
+                                    '- ${e.nama}(${e.umur}th) ${e.jenisKelamin}'))
+                                .toList()),
+                        pw.SizedBox(height: 20),
+                      ]);
+                }));
+              }
 
-            final file = File('${directory.path}/$namaFile.pdf');
-            await file.writeAsBytes(await pdf.save()).then((value) async {
-              await Share.shareFiles(['${directory.path}/$namaFile.pdf'],
-                      subject: namaFile)
-                  .then((value) {
-                log('_ SUKSES');
+              String namaFile = '$nama $phone';
+
+              final file = File('${directory.path}/$namaFile.pdf');
+              await file.writeAsBytes(await pdf.save()).then((value) async {
+                await Share.shareFiles(['${directory.path}/$namaFile.pdf'],
+                        subject: namaFile)
+                    .then((value) {
+                  log('_ SUKSES');
+                }).catchError((onError) {
+                  log('_ GAGAL $onError');
+                });
               }).catchError((onError) {
-                log('_ GAGAL $onError');
+                log('_GAGAL $onError');
               });
             }).catchError((onError) {
-              log('_GAGAL $onError');
+              log('ERROR $onError');
             });
-          }).catchError((onError) {
-            log('ERROR $onError');
           });
-        },
-        child: const Icon(Icons.picture_as_pdf),
-      ),
+    }
+
+    return Scaffold(
+      appBar: AppBarItem(title: 'Rincian Transaksi'),
+      backgroundColor: whiteColor,
       body: BlocBuilder<TransactionCubit, TransactionState>(
         builder: (context, state) {
           if (state is TransactionSuccessGet) {
@@ -615,6 +614,8 @@ class _DetailTransactionAdminPageState
                             ),
                           ),
                         ),
+                        const SizedBox(height: 30),
+                        btnCetak(),
                         const SizedBox(
                           height: 50,
                         ),
