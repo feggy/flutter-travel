@@ -66,12 +66,14 @@ class AdminPage extends StatelessWidget {
             //     Navigator.pushNamed(context, '/supir');
             //   },
             // ),
-            SingleTextCard(
-              text: 'Laporan Transaksi',
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.laporanTransaksiPage);
-              },
-            ),
+            kIsWeb
+                ? SingleTextCard(
+                    text: 'Laporan Transaksi',
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.laporanTransaksiPage);
+                    },
+                  )
+                : const SizedBox(),
             SingleTextCard(
               text: 'Ubah Profil',
               onPressed: () {

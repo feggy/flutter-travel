@@ -1,13 +1,17 @@
 import 'dart:developer';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:travel_wisata/models/laporan_transaksi_model.dart';
 
 import 'package:travel_wisata/models/transaction_model.dart';
 import 'package:travel_wisata/models/travel_model.dart';
 import 'package:travel_wisata/models/wisata_model.dart';
+import 'package:travel_wisata/services/laporan_transaksi_service.dart';
 import 'package:travel_wisata/services/transaction_service.dart';
 import 'package:travel_wisata/services/travel_service.dart';
 import 'package:travel_wisata/services/wisata_service.dart';
@@ -64,10 +68,7 @@ class _TambahLaporanTransaksiPageState
   int totalUangMasuk = 0;
   int totalUangKeluar = 0;
   int hargaPaket = 0;
-
-  var namaController = TextEditingController(text: '');
-  var qtyController = TextEditingController(text: '');
-  var biayaController = TextEditingController(text: '');
+  int peserta = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +125,16 @@ class _TambahLaporanTransaksiPageState
       );
     }
 
-    Widget dialogTambahPengeluaran() {
+    Widget dialogTambahPengeluaran(
+      String nama,
+      String jumlah,
+      String biaya,
+      String id,
+    ) {
+      var namaController = TextEditingController(text: nama);
+      var qtyController = TextEditingController(text: jumlah);
+      var biayaController = TextEditingController(text: biaya);
+
       return Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
@@ -207,15 +217,38 @@ class _TambahLaporanTransaksiPageState
                       );
                     } else {
                       Navigator.pop(context);
-                      setState(() {
-                        listPengeluaran.add(
-                          Pengeluaran(
-                            nama: namaController.text,
-                            qty: int.parse(qtyController.text),
-                            biaya: int.parse(biayaController.text),
-                          ),
-                        );
-                      });
+
+                      if (id.isEmpty) {
+                        setState(() {
+                          var id = 'ps-${Random().nextInt(9999999)}';
+                          listPengeluaran.add(
+                            Pengeluaran(
+                              id: id,
+                              nama: namaController.text,
+                              qty: int.parse(qtyController.text),
+                              biaya: int.parse(biayaController.text),
+                            ),
+                          );
+                        });
+                      } else {
+                        listPengeluaran
+                            .removeWhere((element) => element.id == id);
+                        setState(() {
+                          var id = 'ps-${Random().nextInt(9999999)}';
+                          listPengeluaran.add(
+                            Pengeluaran(
+                              id: id,
+                              nama: namaController.text,
+                              qty: int.parse(qtyController.text),
+                              biaya: int.parse(biayaController.text),
+                            ),
+                          );
+                        });
+                      }
+
+                      biayaController.text = '';
+                      qtyController.text = '';
+                      namaController.text = '';
                     }
                   },
                 )
@@ -244,7 +277,7 @@ class _TambahLaporanTransaksiPageState
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => dialogTambahPengeluaran(),
+                  builder: (context) => dialogTambahPengeluaran('', '', '', ''),
                 );
               },
               child: Text(
@@ -364,6 +397,7 @@ class _TambahLaporanTransaksiPageState
                     idTravel = listTravel
                         .firstWhere((element) => element.nama == p0)
                         .id;
+                    listForRecap = [];
                   });
                 },
               ),
@@ -380,38 +414,65 @@ class _TambahLaporanTransaksiPageState
                 title: 'Bulan',
                 list: dropBulan,
                 dropValue: dropDownValueBulan,
-                onChanged: (p0) {
+                onChanged: (p0) async {
                   listForRecap = [];
-                  for (var element in listTransaction) {
-                    if (dropdownValue == 'Wisata' &&
-                        element.transaction?.idTravel == idWisata) {
-                      hargaPaket = element.wisata!.biaya;
-                      var monthRes = DateFormat("MMMM yyyy")
-                          .format(element.transaction!.timeCreated);
-                      if (monthRes == p0) {
-                        listForRecap.add(element);
+                  if (p0 != null) {
+                    var check = await LaporanTransaksiService().checkBulan(
+                        nama: dropdownValue == 'Wisata'
+                            ? dropDownValueWisata
+                            : dropDownValueTravel,
+                        bulan: p0);
+
+                    if (!check) {
+                      for (var element in listTransaction) {
+                        if (dropdownValue == 'Wisata' &&
+                            element.transaction?.idTravel == idWisata) {
+                          hargaPaket = element.wisata!.biaya;
+                          var monthRes = DateFormat("MMMM yyyy")
+                              .format(element.transaction!.timeCreated);
+                          if (monthRes == p0) {
+                            listForRecap.add(element);
+                          }
+                        } else if (dropdownValue == 'Travel' &&
+                            element.transaction?.idTravel == idTravel) {
+                          hargaPaket = element.travel!.biaya;
+                          var monthRes = DateFormat("MMMM yyyy")
+                              .format(element.transaction!.timeCreated);
+                          if (monthRes == p0) {
+                            listForRecap.add(element);
+                          }
+                        }
                       }
-                    } else if (dropdownValue == 'Travel' &&
-                        element.transaction?.idTravel == idTravel) {
-                      hargaPaket = element.travel!.biaya;
-                      var monthRes = DateFormat("MMMM yyyy")
-                          .format(element.transaction!.timeCreated);
-                      if (monthRes == p0) {
-                        listForRecap.add(element);
+                      var traveler = 0;
+                      for (var element in listForRecap) {
+                        traveler += element.transaction!.listTraveler.length;
                       }
+
+                      peserta = traveler;
+
+                      setState(() {
+                        dropDownValueBulan = p0;
+                        listForRecap;
+                        totalUangMasuk = hargaPaket * traveler;
+                      });
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: const Text('Gagal'),
+                          content: Text(
+                              'Anda sudah pernah menambahkan data transaksi $p0, hapus terlebih dahulu jika ingin menambahkan pada bulan tersebut'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'))
+                          ],
+                        ),
+                      );
                     }
                   }
-                  var traveler = 0;
-                  for (var element in listForRecap) {
-                    traveler += element.transaction!.listTraveler.length;
-                  }
-                  log('_ $totalUangMasuk');
-
-                  setState(() {
-                    dropDownValueBulan = p0!;
-                    listForRecap;
-                    totalUangMasuk = hargaPaket * traveler;
-                  });
                 },
               ),
             )
@@ -435,7 +496,22 @@ class _TambahLaporanTransaksiPageState
                         style: blackTextStyle.copyWith(fontWeight: semiBold)),
                   ])),
             )
-          : const SizedBox();
+          : dropDownValueBulan != 'Pilih Bulan'
+              ? Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Text.rich(TextSpan(
+                      text: 'Tidak ada transaksi pada $dropDownValueBulan di ',
+                      style: blackTextStyle,
+                      children: [
+                        TextSpan(
+                          text: dropDownValueWisata != 'Pilih Wisata'
+                              ? dropDownValueWisata
+                              : dropDownValueTravel,
+                          style: blackTextStyle.copyWith(fontWeight: semiBold),
+                        )
+                      ])),
+                )
+              : const SizedBox();
     }
 
     Widget dataPengeluaran() {
@@ -466,13 +542,27 @@ class _TambahLaporanTransaksiPageState
                   label: Text('Biaya'),
                 ),
               ],
+              showCheckboxColumn: false,
               rows: List<DataRow>.generate(listPengeluaran.length, (index) {
                 var item = listPengeluaran[index];
-                return DataRow(cells: [
-                  DataCell(Text(item.nama)),
-                  DataCell(Text(item.qty.toString())),
-                  DataCell(Text(item.biaya.toString())),
-                ]);
+                return DataRow(
+                  cells: [
+                    DataCell(Text(item.nama)),
+                    DataCell(Text(item.qty.toString())),
+                    DataCell(Text(item.biaya.toString())),
+                  ],
+                  onSelectChanged: (value) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => dialogTambahPengeluaran(
+                        item.nama,
+                        item.qty.toString(),
+                        item.biaya.toString(),
+                        item.id,
+                      ),
+                    );
+                  },
+                );
               }),
             );
     }
@@ -480,7 +570,7 @@ class _TambahLaporanTransaksiPageState
     Widget btnSimpan() {
       return CustomButton(
         title: 'SIMPAN',
-        onPressed: () {
+        onPressed: () async {
           String? error;
           if (dropdownValue == 'Pilih Kategori') {
             error = 'Silahkan pilih kategori terlebih dahulu';
@@ -511,7 +601,75 @@ class _TambahLaporanTransaksiPageState
                 ],
               ),
             );
-          } else {}
+          } else {
+            showLoaderDialog(context);
+
+            var idTrav = '';
+            var nama = '';
+            var bulan = Timestamp.fromDate(
+                DateFormat('MMMM yyyy').parse(dropDownValueBulan));
+            var timeCreated = Timestamp.fromDate(DateTime.now());
+
+            if (dropdownValue == 'Wisata') {
+              idTrav = idWisata;
+              nama = dropDownValueWisata;
+            } else if (dropdownValue == 'Travel') {
+              idTrav = idTravel;
+              nama = dropDownValueTravel;
+            }
+
+            LaporanTransaksiService()
+                .add(
+                    data: LaporanTransaksiModel(
+              id: '',
+              idTravel: idTrav,
+              kategori: dropdownValue,
+              nama: nama,
+              bulan: bulan,
+              totalPemasukkan: totalUangMasuk,
+              totalPengeluaran: totalUangKeluar,
+              listPengeluaran: listPengeluaran,
+              banyakPeserta: peserta,
+              biayaPaket: hargaPaket,
+              timeCreated: timeCreated,
+            ))
+                .then((value) {
+              Navigator.pop(context);
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text('Berhasil'),
+                  content: const Text(
+                      'Anda berhasil menambahkan data laporan transaksi baru'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context)
+                            ..pop()
+                            ..pop(true);
+                        },
+                        child: const Text('OK'))
+                  ],
+                ),
+              );
+            }).catchError((onError) {
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text('Gagal'),
+                  content: const Text(
+                      'Terjadi kesalahan saat menambahkan laporan transaksi'),
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: const Text('OK'))
+                  ],
+                ),
+              );
+            });
+          }
         },
       );
     }
@@ -542,15 +700,4 @@ class _TambahLaporanTransaksiPageState
       ),
     );
   }
-}
-
-class Pengeluaran {
-  String nama;
-  int qty;
-  int biaya;
-  Pengeluaran({
-    required this.nama,
-    required this.qty,
-    required this.biaya,
-  });
 }
