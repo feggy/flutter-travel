@@ -7,6 +7,8 @@ import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/custom_input_text.dart';
 
+import '../../main.dart';
+
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -77,7 +79,7 @@ class LoginPage extends StatelessWidget {
                   context, '/main', (route) => false);
             } else if (state.user.role == 'ADMIN') {
               Navigator.pushNamedAndRemoveUntil(
-                  context, '/admin', (route) => false);
+                  context, Routes.admin, (route) => false);
             } else if (state.user.role == 'PEMANDU') {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/pemandu_home', (route) => false);

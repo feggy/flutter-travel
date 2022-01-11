@@ -20,6 +20,8 @@ import 'package:travel_wisata/ui/widgets/hari_agenda_item.dart';
 import 'package:path/path.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../../main.dart';
+
 class TambahWisataPage extends StatefulWidget {
   final WisataModel? data;
 
@@ -193,7 +195,7 @@ class _TambahWisataPageState extends State<TambahWisataPage> {
                   TextButton(
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/admin', (route) => false);
+                            context, Routes.admin, (route) => false);
                       },
                       child: const Text('OK'))
                 ],

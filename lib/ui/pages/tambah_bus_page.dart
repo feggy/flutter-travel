@@ -19,6 +19,8 @@ import 'package:travel_wisata/ui/widgets/custom_input_text.dart';
 import 'package:path/path.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../main.dart';
+
 class TambahBusPage extends StatefulWidget {
   final TravelModel? data;
 
@@ -144,7 +146,7 @@ class _TambahBusPageState extends State<TambahBusPage> {
                   TextButton(
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(
-                            context, '/admin', (route) => false);
+                            context, Routes.admin, (route) => false);
                       },
                       child: const Text('OK'))
                 ],

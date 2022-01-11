@@ -22,6 +22,8 @@ import 'package:travel_wisata/ui/pages/admin/daftar_transaksi_admin_page.dart';
 import 'package:travel_wisata/ui/pages/data_traveler_page.dart';
 import 'package:travel_wisata/ui/pages/admin/detail_transaction_admin_page.dart';
 import 'package:travel_wisata/ui/pages/konfirmasi_pesanan_page.dart';
+import 'package:travel_wisata/ui/pages/laporan_transaksi/laporan_transaksi_page.dart';
+import 'package:travel_wisata/ui/pages/laporan_transaksi/tambah_laporan_page.dart';
 import 'package:travel_wisata/ui/pages/login_page.dart';
 import 'package:travel_wisata/ui/pages/main_page.dart';
 import 'package:travel_wisata/ui/pages/pemandu/pemandu_page.dart';
@@ -40,7 +42,6 @@ import 'package:travel_wisata/ui/pages/tambah_wisata_page.dart';
 import 'package:travel_wisata/ui/pages/admin/wisata_admin_page.dart';
 import 'package:travel_wisata/ui/pages/ubah_profil_page.dart';
 import 'package:travel_wisata/ui/pages/wisata_page.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,7 +75,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const SplashPage(),
           '/main': (context) => const MainPage(),
-          '/admin': (context) => const AdminPage(),
+          Routes.admin: (context) => const AdminPage(),
           '/login': (context) => LoginPage(),
           '/register': (context) => RegisterPage(),
           '/wisata': (context) => const WisataPage(),
@@ -100,8 +101,18 @@ class MyApp extends StatelessWidget {
           '/sukses_travel': (context) => const SuksesMulaiTravelPage(),
           '/akhiri_travel': (context) => const SuksesSelesaTravelPage(),
           '/ubah_profil': (context) => const UbahProfilPage(),
+          Routes.laporanTransaksiPage: (context) =>
+              const LaporanTransaksiPage(),
+          Routes.tambahLaporanTransaksiPage: (context) =>
+              const TambahLaporanTransaksiPage(),
         },
       ),
     );
   }
+}
+
+abstract class Routes {
+  static const admin = '/admin';
+  static const laporanTransaksiPage = '/admin/laporan_transaksi';
+  static const tambahLaporanTransaksiPage = '/admin/laporan_transaksi/tambah';
 }

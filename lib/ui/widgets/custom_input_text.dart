@@ -1,4 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
 import 'package:travel_wisata/shared/theme.dart';
 
 class CustomInputText extends StatelessWidget {
@@ -7,14 +11,18 @@ class CustomInputText extends StatelessWidget {
   final TextInputType inputType;
   final TextEditingController controller;
   final TextInputAction imeOption;
+  final bool readOnly;
+  List<TextInputFormatter>? inputFormatters;
 
-  const CustomInputText({
+  CustomInputText({
     Key? key,
     required this.label,
     this.obscureText = false,
     this.inputType = TextInputType.name,
     required this.controller,
     this.imeOption = TextInputAction.next,
+    this.readOnly = false,
+    this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -45,6 +53,9 @@ class CustomInputText extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
         ),
+        readOnly: readOnly,
+        enabled: readOnly ? false : null,
+        inputFormatters: inputFormatters,
       ),
     );
   }

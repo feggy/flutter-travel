@@ -7,9 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 import 'package:travel_wisata/shared/theme.dart';
 import 'package:travel_wisata/ui/pages/daftar_pelanggan_page.dart';
-import 'package:travel_wisata/ui/pages/rekap/rekap_transaksi_page.dart';
+import 'package:travel_wisata/ui/pages/laporan_transaksi/laporan_transaksi_page.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/single_text_card.dart';
+
+import '../../../main.dart';
 
 class AdminPage extends StatelessWidget {
   const AdminPage({Key? key}) : super(key: key);
@@ -65,14 +67,9 @@ class AdminPage extends StatelessWidget {
             //   },
             // ),
             SingleTextCard(
-              text: 'Rekap Transaksi',
+              text: 'Laporan Transaksi',
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (builder) => const RekapTransaksiPage(),
-                  ),
-                );
+                Navigator.pushNamed(context, Routes.laporanTransaksiPage);
               },
             ),
             SingleTextCard(

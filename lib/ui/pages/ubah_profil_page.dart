@@ -11,6 +11,8 @@ import 'package:travel_wisata/ui/widgets/app_bar_item.dart';
 import 'package:travel_wisata/ui/widgets/custom_button.dart';
 import 'package:travel_wisata/ui/widgets/custom_input_text.dart';
 
+import '../../main.dart';
+
 class UbahProfilPage extends StatefulWidget {
   const UbahProfilPage({Key? key}) : super(key: key);
 
@@ -292,7 +294,7 @@ class _UbahProfilPageState extends State<UbahProfilPage> {
                             onPressed: () {
                               if (role == 'ADMIN') {
                                 Navigator.pushNamedAndRemoveUntil(
-                                    context, '/admin', (route) => false);
+                                    context, Routes.admin, (route) => false);
                               } else if (role == 'USER') {
                                 Navigator.pushNamedAndRemoveUntil(
                                     context, '/main', (route) => false);

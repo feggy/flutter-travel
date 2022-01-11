@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_wisata/cubit/auth_cubit.dart';
 
+import '../../main.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
 
@@ -33,7 +35,7 @@ class _SplashPageState extends State<SplashPage> {
           Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
         } else if (role == 'ADMIN') {
           Navigator.pushNamedAndRemoveUntil(
-              context, '/admin', (route) => false);
+              context, Routes.admin, (route) => false);
         } else if (role == 'PEMANDU') {
           Navigator.pushNamedAndRemoveUntil(
               context, '/pemandu_home', (route) => false);
